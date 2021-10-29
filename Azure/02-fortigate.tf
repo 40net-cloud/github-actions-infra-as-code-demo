@@ -140,19 +140,19 @@ data "template_file" "fgt_custom_data" {
   template = file("${path.module}/customdata-fgt.tpl")
 
   vars = {
-    fgt_vm_name           = "${var.PREFIX}-FGT-VM"
-    fgt_license_file      = var.FGT_BYOL_LICENSE_FILE
-    fgt_license_flexvm    = var.FGT_BYOL_FLEXVM_LICENSE_FILE
-    fgt_username          = var.USERNAME
-    fgt_password          = var.PASSWORD
-    fgt_ssh_public_key    = var.FGT_SSH_PUBLIC_KEY_FILE
-    fgt_external_ipaddr   = var.fgt_ipaddress["1"]
-    fgt_external_mask     = var.subnetmask["1"]
-    fgt_external_gw       = var.gateway_ipaddress["1"]
-    fgt_internal_ipaddr   = var.fgt_ipaddress["2"]
-    fgt_internal_mask     = var.subnetmask["2"]
-    fgt_internal_gw       = var.gateway_ipaddress["2"]
-    vnet_network          = var.vnet
+    fgt_vm_name         = "${var.PREFIX}-FGT-VM"
+    fgt_license_file    = var.FGT_BYOL_LICENSE_FILE
+    fgt_license_flexvm  = var.FGT_BYOL_FLEXVM_LICENSE_FILE
+    fgt_username        = var.USERNAME
+    fgt_password        = var.PASSWORD
+    fgt_ssh_public_key  = var.FGT_SSH_PUBLIC_KEY_FILE
+    fgt_external_ipaddr = var.fgt_ipaddress["1"]
+    fgt_external_mask   = var.subnetmask["1"]
+    fgt_external_gw     = var.gateway_ipaddress["1"]
+    fgt_internal_ipaddr = var.fgt_ipaddress["2"]
+    fgt_internal_mask   = var.subnetmask["2"]
+    fgt_internal_gw     = var.gateway_ipaddress["2"]
+    vnet_network        = var.vnet
   }
 }
 

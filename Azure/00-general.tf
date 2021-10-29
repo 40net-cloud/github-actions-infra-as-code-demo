@@ -99,10 +99,10 @@ variable "subnet" {
   description = ""
 
   default = {
-    "1" = "172.16.136.0/26"   # External
-    "2" = "172.16.136.64/26"  # Internal
-    "3" = "172.16.137.0/24"   # Protected a
-    "4" = "172.16.138.0/24"   # Protected b
+    "1" = "172.16.136.0/26"  # External
+    "2" = "172.16.136.64/26" # Internal
+    "3" = "172.16.137.0/24"  # Protected a
+    "4" = "172.16.138.0/24"  # Protected b
   }
 }
 
@@ -123,8 +123,8 @@ variable "fgt_ipaddress" {
   description = ""
 
   default = {
-    "1" = "172.16.136.5"   # External
-    "2" = "172.16.136.69"  # Internal
+    "1" = "172.16.136.5"  # External
+    "2" = "172.16.136.69" # Internal
   }
 }
 
@@ -133,8 +133,8 @@ variable "gateway_ipaddress" {
   description = ""
 
   default = {
-    "1" = "172.16.136.1"   # External
-    "2" = "172.16.136.65"  # Internal
+    "1" = "172.16.136.1"  # External
+    "2" = "172.16.136.65" # Internal
   }
 }
 
