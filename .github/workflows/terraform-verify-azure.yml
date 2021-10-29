@@ -1,0 +1,74 @@
+name: Terraform test Azure
+
+env:
+  TFPath: Azure/
+
+on:
+  push:
+    paths:
+    - 'Azure/**'
+    - '!Azure/**.md'
+
+jobs:
+  terraform_AA:
+    name: 'Terraform Azure Verify'
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_PREFIX: "FORTINET-${{ github.run_id }}-${{ github.run_number }}"
+      TF_VAR_LOCATION: "westeurope"
+      TF_VAR_USERNAME: "azureuser"
+      TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+    steps:
+    - name: "Checkout"
+      uses: actions/checkout@v2
+
+    - name: "Setup Terraform"
+      uses: hashicorp/setup-terraform@v1
+
+    - name: "Terraform Init"
+      id: init
+      run: terraform init
+      working-directory: ${{ env.TFPath }}
+
+    - name: "Terraform Validate"
+      id: validate
+      run: terraform validate
+      working-directory: ${{ env.TFPath }}
+
+    - name: "Terraform Format"
+      id: format
+      run: terraform fmt -check -diff
+      working-directory: ${{ env.TFPath }}
+
+    - name: "Terraform Plan"
+      id: plan
+      run: terraform plan -out plan.tfplan
+      working-directory: ${{ env.TFPath }}
+
+    - name: "Terraform Show"
+      id: show
+      run: terraform show -json plan.tfplan
+      working-directory: ${{ env.TFPath }}
+
+    - name: "Save Plan JSON"
+      run: echo '${{ steps.show.outputs.stdout }}' > plan.json # Do not change
+
+    - name: Run infracost diff
+      id: cost
+      uses: infracost/infracost-gh-action@master
+      env:
+        INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        entrypoint: /scripts/ci/diff.sh # Do not change
+        path: plan.json # Do not change
+        show_skipped: true
+
+    - name: "Infracost output"
+      run: echo '${{ steps.cost.outputs.total_monthly_cost }}'
+
