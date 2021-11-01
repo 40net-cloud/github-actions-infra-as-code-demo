@@ -10,11 +10,6 @@ on:
     paths:
     - 'Azure/**'
     - '!Azure/**.md'
-
-on:
-  push:
-    branches:
-      - main
   pull_request:
 
 jobs:
