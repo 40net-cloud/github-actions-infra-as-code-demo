@@ -54,7 +54,7 @@ jobs:
       - name: Terraform Plan
         id: plan
 #        if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -out plan.tfplan
+        run: terraform plan -no-color
         continue-on-error: true
         working-directory: ${{ env.TFPath }}
 
@@ -93,6 +93,7 @@ jobs:
         env:
           INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INFRACOST_TERRAFORM_WORKSPACE: ${{ secrets.TF_API_TOKEN }}
         with:
           entrypoint: /scripts/ci/diff.sh # Do not change
           path: plan.json # Do not change
