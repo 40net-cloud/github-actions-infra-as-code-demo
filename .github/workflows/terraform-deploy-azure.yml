@@ -1,4 +1,4 @@
-name: Terraform test Azure
+name: Terraform Deploy Azure
 
 env:
   TFPath: Azure/
