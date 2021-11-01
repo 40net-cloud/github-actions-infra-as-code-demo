@@ -8,6 +8,7 @@
 #
 # Variables during deployment the first 4 (PREFIX, LOCATION, USERNAME, PASSWORD) are mandatory
 #
+#
 ##############################################################################################################
 
 # Prefix for all resources created for this deployment in Microsoft Azure
