@@ -1,9 +1,15 @@
 ##############################################################################################################
 #
-# FortiGate VM
-# Terraform deployment template for Microsoft Azure
+# Fortinet
+# Infrastructure As Code Demo
+# GitHub Actions - Terraform Cloud
 #
 ##############################################################################################################
+#
+# Deployment of the FortiGate
+#
+##############################################################################################################
+
 
 resource "azurerm_network_security_group" "fgtnsg" {
   name                = "${var.PREFIX}-FGT-NSG"

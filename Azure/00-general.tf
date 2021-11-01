@@ -1,7 +1,8 @@
 ##############################################################################################################
 #
-# FortiGate Active/Passive High Availability with Azure Standard Load Balancer - External and Internal
-# Terraform deployment template for Microsoft Azure
+# Fortinet
+# Infrastructure As Code Demo
+# GitHub Actions - Terraform Cloud
 #
 ##############################################################################################################
 
@@ -66,6 +67,14 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = ">=2.0.0"
+    }
+  }
+
+  backend "remote" {
+    organization = "40net-cloud"
+
+    workspaces {
+      name = "github-actions-infra-as-code-demo"
     }
   }
 }
