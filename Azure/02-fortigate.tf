@@ -167,3 +167,5 @@ data "azurerm_public_ip" "fgtpip" {
   resource_group_name = azurerm_resource_group.resourcegroup.name
   depends_on          = [azurerm_virtual_machine.fgtvm]
 }
+
+##############################################################################################################

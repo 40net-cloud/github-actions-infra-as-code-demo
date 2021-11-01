@@ -96,7 +96,7 @@ jobs:
           INFRACOST_TERRAFORM_WORKSPACE: ${{ secrets.TF_API_TOKEN }}
         with:
           entrypoint: /scripts/ci/diff.sh # Do not change
-          path: plan.json # Do not change
+          path: ${{ env.TFPath }}
           show_skipped: true
 
       - name: "Infracost output"
