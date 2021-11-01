@@ -10,7 +10,7 @@ on:
     paths:
     - 'Azure/**'
     - '!Azure/**.md'
-  pull_request:
+  pull_request_target:
 
 jobs:
   terraform:
