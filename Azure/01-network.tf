@@ -1,7 +1,8 @@
 ##############################################################################################################
 #
-# FortiGate Active/Passive High Availability with Azure Standard Load Balancer - External and Internal
-# Terraform deployment template for Microsoft Azure
+# Fortinet
+# Infrastructure As Code Demo
+# GitHub Actions - Terraform Cloud
 #
 ##############################################################################################################
 #
