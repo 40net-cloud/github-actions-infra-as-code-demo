@@ -11,6 +11,7 @@ on:
     - 'Azure/**'
     - '!Azure/**.md'
   pull_request_target:
+# To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 
 jobs:
   terraform:
@@ -109,3 +110,4 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        working-directory: ${{ env.TFPath }}
