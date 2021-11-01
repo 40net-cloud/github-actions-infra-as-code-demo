@@ -39,20 +39,24 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
+        working-directory: ${{ env.TFPath }}
 
       - name: Terraform Init
         id: init
         run: terraform init
+        working-directory: ${{ env.TFPath }}
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        working-directory: ${{ env.TFPath }}
 
       - name: Terraform Plan
         id: plan
 #        if: github.event_name == 'pull_request'
         run: terraform plan -no-color -out plan.tfplan
         continue-on-error: true
+        working-directory: ${{ env.TFPath }}
 
       - uses: actions/github-script@0.9.0
 #        if: github.event_name == 'pull_request'
