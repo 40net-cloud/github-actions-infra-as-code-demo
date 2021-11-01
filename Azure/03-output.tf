@@ -26,3 +26,5 @@ data "template_file" "summary" {
 output "deployment_summary" {
   value = data.template_file.summary.rendered
 }
+
+##############################################################################################################
