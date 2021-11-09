@@ -76,3 +76,11 @@ data "template_file" "fgt_custom_data" {
     adminsport       = "${var.adminsport}"
   }
 }
+
+data "aws_network_interface" "eth0" {
+  id = "aws_network_interface.eth0.id"
+}
+
+data "aws_network_interface" "eth1" {
+  id = "aws_network_interface.eth1.id"
+}

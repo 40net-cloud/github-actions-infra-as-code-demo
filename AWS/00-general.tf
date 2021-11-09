@@ -3,6 +3,12 @@
 # Fortinet
 # Infrastructure As Code Demo
 # GitHub Actions - Terraform Cloud
+# Platform: AWS
+#
+##############################################################################################################
+#
+# Variables during deployment the first 7  are mandatory:
+#   PREFIX, LOCATION, USERNAME, PASSWORD, ACCESS_KEY, SECRET_KEY, KEY_PAIR
 #
 ##############################################################################################################
 
