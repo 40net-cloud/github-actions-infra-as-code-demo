@@ -159,8 +159,7 @@ variable "fortinet_tags" {
   type = map(string)
   default = {
     publisher : "Fortinet",
-    template : "GitHub Actions Infra As Code Demo",
-    provider : "7EB3B02F-50E5-4A3E-8CB8-2E12925831GH"
+    template : "GitHub Actions Infra As Code Demo Azure",
   }
 }
 

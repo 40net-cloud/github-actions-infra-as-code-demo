@@ -3,47 +3,13 @@
 # Fortinet
 # Infrastructure As Code Demo
 # GitHub Actions - Terraform Cloud
+# Platform: Azure
 #
 ##############################################################################################################
 #
 # Deployment of the FortiGate Next-generation Firewall
 #
 ##############################################################################################################
-
-
-resource "azurerm_network_security_group" "fgtnsg" {
-  name                = "${var.PREFIX}-FGT-NSG"
-  location            = var.LOCATION
-  resource_group_name = azurerm_resource_group.resourcegroup.name
-}
-
-resource "azurerm_network_security_rule" "fgtnsgallowallout" {
-  name                        = "AllowAllOutbound"
-  resource_group_name         = azurerm_resource_group.resourcegroup.name
-  network_security_group_name = azurerm_network_security_group.fgtnsg.name
-  priority                    = 100
-  direction                   = "Outbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "*"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-}
-
-resource "azurerm_network_security_rule" "fgtnsgallowallin" {
-  name                        = "AllowAllInbound"
-  resource_group_name         = azurerm_resource_group.resourcegroup.name
-  network_security_group_name = azurerm_network_security_group.fgtnsg.name
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "*"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-}
 
 resource "azurerm_public_ip" "fgtpip" {
   name                = "${var.PREFIX}-FGT-PIP"
