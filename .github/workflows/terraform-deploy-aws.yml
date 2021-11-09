@@ -1,7 +1,7 @@
-name: Terraform Deploy Azure
+name: Terraform Deploy AWS
 
 env:
-  TFPath: Azure/
+  TFPath: AWS/
 
 on:
   push:
