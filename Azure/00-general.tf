@@ -78,7 +78,7 @@ terraform {
     organization = "40net-cloud"
 
     workspaces {
-      name = "github-actions-infra-as-code-demo"
+      name = "github-actions-infra-as-code-demo-azure"
     }
   }
 }
