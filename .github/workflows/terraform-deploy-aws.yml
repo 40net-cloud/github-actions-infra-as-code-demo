@@ -1,15 +1,15 @@
-name: Terraform Deploy Azure
+name: Terraform Deploy AWS
 
 env:
-  TFPath: Azure/
+  TFPath: AWS/
 
 on:
   push:
     branches:
       - main
     paths:
-    - 'Azure/**'
-    - '!Azure/**.md'
+    - 'AWS/**'
+    - '!AWS/**.md'
   pull_request_target:
 # To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 
@@ -19,13 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_VAR_PREFIX: "FORTINET-${{ github.run_id }}-${{ github.run_number }}"
-      TF_VAR_LOCATION: "westeurope"
-      TF_VAR_USERNAME: "azureuser"
+      TF_VAR_REGION: "westeurope"
+      TF_VAR_USERNAME: "admin"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      TF_VAR_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      TF_VAR_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      TF_VAR_KEY_PAIR: ${{ secrets.AWS_KEY_PAIR }}
 
     steps:
       - name: Checkout
