@@ -11,6 +11,11 @@ on:
     - 'Azure/**'
     - '!Azure/**.md'
   pull_request_target:
+    branches:
+      - main
+    paths:
+    - 'Azure/**'
+    - '!Azure/**.md'
 # To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 
 jobs:
