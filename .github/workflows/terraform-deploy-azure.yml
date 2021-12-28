@@ -101,9 +101,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INFRACOST_TERRAFORM_CLOUD_TOKEN: ${{ secrets.TF_API_TOKEN }}
         with:
-          entrypoint: /scripts/ci/diff.sh # Do not change
           path: ${{ env.TFPath }}
           show_skipped: true
+          post_condition: '{"update": true}'
 
       - name: "Infracost output"
         run: echo '${{ steps.cost.outputs.total_monthly_cost }}'
