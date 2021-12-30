@@ -10,7 +10,7 @@ on:
     paths:
     - 'AWS/**'
     - '!AWS/**.md'
-  pull_request:
+  pull_request_target:
     branches:
       - main
     paths:
@@ -92,20 +92,20 @@ jobs:
               body: output
             })
 
-      - name: Run infracost diff
-        id: cost
-        uses: infracost/infracost-gh-action@master
-        env:
-          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          INFRACOST_TERRAFORM_CLOUD_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v1
         with:
-          path: ${{ env.TFPath }}
-          show_skipped: true
-          post_condition: '{"update": true}'
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
 
-      - name: "Infracost output"
-        run: echo '${{ steps.cost.outputs.total_monthly_cost }}'
+      - name: Generate Infracost JSON
+        run: infracost breakdown --path plan.json --format json --usage-file infracost-usage.yml --out-file /tmp/infracost.json
+        working-directory: ${{ env.TFPath }}
+
+      - name: Post Infracost comment
+        uses: infracost/actions/comment@v1
+        with:
+          path: /tmp/infracost.json
+          behavior: update
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
