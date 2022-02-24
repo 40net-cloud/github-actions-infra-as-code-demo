@@ -48,6 +48,7 @@ jobs:
         with:
           # terraform_version: 0.13.0:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
 
       - name: Terraform Format
         id: fmt
@@ -105,10 +106,12 @@ jobs:
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
+      - name: Convert TFPLAN
+        run: terraform show -json plan.tfplan > plan.json
+        working-directory: ${{ env.TFPath }}
+
       - name: Generate Infracost JSON
-        run: |
-          terraform show -json plan.tfplan > plan.json
-          infracost breakdown --path plan.json --format json --usage-file infracost-usage.yml --out-file /tmp/infracost.json
+        run: infracost breakdown --path plan.json --format json --usage-file infracost-usage.yml --out-file /tmp/infracost.json
         working-directory: ${{ env.TFPath }}
 
       - name: Post Infracost comment
