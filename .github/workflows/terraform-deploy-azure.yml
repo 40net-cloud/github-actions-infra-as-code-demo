@@ -151,8 +151,6 @@ jobs:
 
       - name: Terraform Output
         run: terraform output -raw ansible_inventory > "ansible/inventory"
-        working-directory: ${{ env.TFPath }}
 
       - name: Ansible config
         run: ansible-playbook ansible/fgt.yaml -i ansible/inventory
-        working-directory: ${{ env.TFPath }}
