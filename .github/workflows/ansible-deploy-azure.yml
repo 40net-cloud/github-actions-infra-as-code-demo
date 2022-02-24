@@ -34,6 +34,10 @@ jobs:
       TF_VAR_FLEXVM_PROGRAM_SERIAL: "${{ secrets.FLEXVM_PROGRAM_SERIAL }}"
       TF_VAR_FLEXVM_CONFIG_NAME: "${{ secrets.FLEXVM_CONFIG_NAME }}"
       TF_VAR_FLEXVM_VM_SERIAL: "${{ secrets.FLEXVM_VM_SERIAL }}"
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
     steps:
       - name: Checkout
