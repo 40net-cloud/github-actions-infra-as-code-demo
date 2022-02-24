@@ -153,12 +153,12 @@ jobs:
 
       - name: Terraform Output
         run: |
-          terraform output -raw ansible_inventory > "/tmp/ansible/inventory"
+          terraform output -raw ansible_inventory > "/tmp/ansible-inventory"
           pwd
-          ls -la /tmp/ansible/inventory
+          ls -la /tmp/ansible-inventory
 
       - name: Ansible config
         run: |
           pwd
-          more /tmp/ansible/inventory
-          ansible-playbook ansible/fgt.yaml -i /tmp/ansible/inventory
+          more /tmp/ansible-inventory
+          ansible-playbook ansible/fgt.yaml -i /tmp/ansible-inventory
