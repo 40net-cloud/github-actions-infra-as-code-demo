@@ -23,7 +23,7 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     env:
-      TF_VAR_PREFIX: "FORTINET-${{ github.run_id }}-${{ github.run_number }}"
+      TF_VAR_PREFIX: "FORTINET-1554562727-33"
       TF_VAR_LOCATION: "westeurope"
       TF_VAR_USERNAME: "azureuser"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
