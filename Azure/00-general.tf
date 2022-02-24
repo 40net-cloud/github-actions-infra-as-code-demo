@@ -180,7 +180,7 @@ variable "backend_tags" {
 resource "azurerm_resource_group" "resourcegroup" {
   name     = "${var.PREFIX}-RG"
   location = var.LOCATION
-  tags = var.fortinet_tags
+  tags     = var.fortinet_tags
 }
 
 ##############################################################################################################
@@ -211,12 +211,12 @@ data "external" "flexvm" {
   program = ["bash", "${path.root}/flexvm_ops.sh"]
 
   query = {
-    apiUsername  	= var.FLEXVM_API_USERNAME
-    apiPassword 	= var.FLEXVM_API_PASSWORD
-    programSerial 	= var.FLEXVM_PROGRAM_SERIAL
-    configName 		= var.FLEXVM_CONFIG_NAME
-    vmSerial 		= var.FLEXVM_VM_SERIAL
-    vmOp 		= "TOKEN"
+    apiUsername   = var.FLEXVM_API_USERNAME
+    apiPassword   = var.FLEXVM_API_PASSWORD
+    programSerial = var.FLEXVM_PROGRAM_SERIAL
+    configName    = var.FLEXVM_CONFIG_NAME
+    vmSerial      = var.FLEXVM_VM_SERIAL
+    vmOp          = "TOKEN"
   }
 }
 

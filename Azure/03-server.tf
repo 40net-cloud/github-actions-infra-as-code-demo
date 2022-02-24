@@ -11,10 +11,10 @@
 ##############################################################################################################
 
 resource "azurerm_network_interface" "lnxifc" {
-  name                            = "${var.PREFIX}-LNX-VM-ifc"
-  location                        = var.LOCATION
-  resource_group_name             = azurerm_resource_group.resourcegroup.name
-  enable_ip_forwarding            = false
+  name                 = "${var.PREFIX}-LNX-VM-ifc"
+  location             = var.LOCATION
+  resource_group_name  = azurerm_resource_group.resourcegroup.name
+  enable_ip_forwarding = false
 
   ip_configuration {
     name                          = "interface1"
@@ -24,11 +24,11 @@ resource "azurerm_network_interface" "lnxifc" {
 }
 
 resource "azurerm_virtual_machine" "lnxvm" {
-  name                            = "${var.PREFIX}-LNX-VM"
-  location                        = var.LOCATION
-  resource_group_name             = azurerm_resource_group.resourcegroup.name
-  network_interface_ids           = [azurerm_network_interface.lnxifc.id]
-  vm_size                         = "Standard_B1s"
+  name                  = "${var.PREFIX}-LNX-VM"
+  location              = var.LOCATION
+  resource_group_name   = azurerm_resource_group.resourcegroup.name
+  network_interface_ids = [azurerm_network_interface.lnxifc.id]
+  vm_size               = "Standard_B1s"
 
   storage_image_reference {
     publisher = "Canonical"
