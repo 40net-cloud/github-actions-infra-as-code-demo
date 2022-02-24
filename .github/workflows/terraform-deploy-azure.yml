@@ -104,7 +104,9 @@ jobs:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
       - name: Generate Infracost JSON
-        run: infracost breakdown --path plan.json --format json --usage-file infracost-usage.yml --out-file /tmp/infracost.json
+        run: |
+          terraform show -json plan.tfplan > plan.json
+          infracost breakdown --path plan.json --format json --usage-file infracost-usage.yml --out-file /tmp/infracost.json
         working-directory: ${{ env.TFPath }}
 
       - name: Post Infracost comment
