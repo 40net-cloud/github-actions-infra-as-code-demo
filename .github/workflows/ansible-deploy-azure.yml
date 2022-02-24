@@ -38,6 +38,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      INVENTORY: "/tmp/ansible-inventory"
 
     steps:
       - name: Checkout
@@ -57,14 +58,14 @@ jobs:
       - name: Terraform Output
         run: |
           terraform refresh
-          terraform output -raw ansible_inventory > "/tmp/ansible-inventory"
+          terraform output -raw ansible_inventory > ${{ env.INVENTORY }}
           pwd
-          ls -la /tmp/ansible-inventory
+          ls -la ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
 
       - name: Ansible config
         run: |
           pwd
-          more /tmp/ansible-inventory
-          ansible-playbook ansible/fgt.yaml -i /tmp/ansible-inventory
+          more ${{ env.INVENTORY }}
+          ansible-playbook ansible/fgt.yaml -i ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
