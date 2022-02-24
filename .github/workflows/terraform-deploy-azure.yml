@@ -27,6 +27,11 @@ jobs:
       TF_VAR_LOCATION: "westeurope"
       TF_VAR_USERNAME: "azureuser"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
+      TF_VAR_FLEXVM_API_USERNAME: "${{ secrets.FLEXVM_API_USERNAME }}"
+      TF_VAR_FLEXVM_API_PASSWORD: "${{ secrets.FLEXVM_API_PASSWORD }}"
+      TF_VAR_FLEXVM_PROGRAM_SERIAL: "${{ secrets.FLEXVM_PROGRAM_SERIAL }}"
+      TF_VAR_FLEXVM_CONFIG_NAME: "${{ secrets.FLEXVM_CONFIG_NAME }}"
+      TF_VAR_FLEXVM_VM_SERIAL: "${{ secrets.FLEXVM_VM_SERIAL }}"
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
@@ -115,4 +120,37 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        working-directory: ${{ env.TFPath }}
+
+  Ansible:
+    name: "Ansible"
+    runs-on: ubuntu-latest
+    needs: terraform
+    env:
+      TF_VAR_PREFIX: "FORTINET-${{ github.run_id }}-${{ github.run_number }}"
+      TF_VAR_LOCATION: "westeurope"
+      TF_VAR_USERNAME: "azureuser"
+      TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.TFPath }}
+
+      - name: Terraform Output
+        run: terraform output -raw ansible_inventory > "ansible/inventory"
+        working-directory: ${{ env.TFPath }}
+
+      - name: Ansible config
+        run: ansible-playbook ansible/fgt.yaml -i ansible/inventory
         working-directory: ${{ env.TFPath }}

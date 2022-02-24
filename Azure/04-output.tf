@@ -23,8 +23,24 @@ data "template_file" "summary" {
   }
 }
 
+data "template_file" "ansible" {
+  template = file("${path.module}/ansible.tpl")
+
+  vars = {
+    username                   = var.USERNAME
+    password                   = var.PASSWORD
+    location                   = var.LOCATION
+    fgt_public_ip_address      = data.azurerm_public_ip.fgtpip.ip_address
+    fgt_public_fqdn            = data.azurerm_public_ip.fgtpip.fqdn
+    fgt_hostname               = "${var.PREFIX}-FGT-VM"
+  }
+}
+
 output "deployment_summary" {
   value = data.template_file.summary.rendered
 }
 
+output "ansible_inventory" {
+  value = data.template_file.ansible.rendered
+}
 ##############################################################################################################

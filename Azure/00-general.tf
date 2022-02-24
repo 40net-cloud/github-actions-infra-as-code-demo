@@ -31,7 +31,7 @@ variable "PASSWORD" {
 
 variable "FGT_IMAGE_SKU" {
   description = "Azure Marketplace default image sku hourly (PAYG 'fortinet_fg-vm_payg_20190624') or byol (Bring your own license 'fortinet_fg-vm')"
-  default     = "fortinet_fg-vm_payg_20190624"
+  default     = "fortinet_fg-vm"
 }
 
 variable "FGT_VERSION" {
@@ -160,6 +160,16 @@ variable "fortinet_tags" {
   default = {
     publisher : "Fortinet",
     template : "GitHub Actions Infra As Code Demo Azure",
+    environment : "staging"
+  }
+}
+
+variable "backend_tags" {
+  type = map(string)
+  default = {
+    template : "GitHub Actions Infra As Code Demo Azure",
+    environment : "staging",
+    type : "websrv",
   }
 }
 
@@ -170,6 +180,49 @@ variable "fortinet_tags" {
 resource "azurerm_resource_group" "resourcegroup" {
   name     = "${var.PREFIX}-RG"
   location = var.LOCATION
+  tags = var.fortinet_tags
 }
 
 ##############################################################################################################
+# Retrieve Flex VM token
+##############################################################################################################
+
+variable "FLEXVM_API_USERNAME" {
+  description = "FlexVM API username"
+}
+
+variable "FLEXVM_API_PASSWORD" {
+  description = "FlexVM API password"
+}
+
+variable "FLEXVM_PROGRAM_SERIAL" {
+  description = "FlexVM Program Serial"
+}
+
+variable "FLEXVM_CONFIG_NAME" {
+  description = "FlexVM Config Name"
+}
+
+variable "FLEXVM_VM_SERIAL" {
+  description = "FlexVM VM Serial"
+}
+
+data "external" "flexvm" {
+  program = ["bash", "${path.root}/flexvm_ops.sh"]
+
+  query = {
+    apiUsername  	= var.FLEXVM_API_USERNAME
+    apiPassword 	= var.FLEXVM_API_PASSWORD
+    programSerial 	= var.FLEXVM_PROGRAM_SERIAL
+    configName 		= var.FLEXVM_CONFIG_NAME
+    vmSerial 		= var.FLEXVM_VM_SERIAL
+    vmOp 		= "TOKEN"
+  }
+}
+
+output "flexvm_token" {
+  value = data.external.flexvm.result.vmToken
+}
+
+##############################################################################################################
+

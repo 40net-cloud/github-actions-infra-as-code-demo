@@ -114,7 +114,7 @@ data "template_file" "fgt_custom_data" {
   vars = {
     fgt_vm_name         = "${var.PREFIX}-FGT-VM"
     fgt_license_file    = var.FGT_BYOL_LICENSE_FILE
-    fgt_license_flexvm  = var.FGT_BYOL_FLEXVM_LICENSE_FILE
+    fgt_license_flexvm  = data.external.flexvm.result.vmToken
     fgt_username        = var.USERNAME
     fgt_password        = var.PASSWORD
     fgt_ssh_public_key  = var.FGT_SSH_PUBLIC_KEY_FILE
@@ -135,3 +135,17 @@ data "azurerm_public_ip" "fgtpip" {
 }
 
 ##############################################################################################################
+
+data "azurerm_subscription" "current" {}
+
+resource "azurerm_role_assignment" "rolerg" {
+  scope                = azurerm_resource_group.resourcegroup.id
+  role_definition_name = "Reader"
+  principal_id         = azurerm_virtual_machine.fgtvm.identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "rolesub" {
+  scope                = data.azurerm_subscription.current.id
+  role_definition_name = "Reader"
+  principal_id         = azurerm_virtual_machine.fgtvm.identity[0].principal_id
+}

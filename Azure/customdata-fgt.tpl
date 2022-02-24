@@ -57,6 +57,39 @@ end
 %{ if fgt_license_flexvm != "" }
 exec vm-license ${fgt_license_flexvm}
 %{ endif }
+config system automation-trigger
+    edit "RT-Trigger"
+        set event-type event-log
+        set logid 53200 53201
+        config fields
+            edit 1
+                set name "cfgobj"
+                set value "websrv"
+            next
+        end
+    next
+end
+config system automation-action
+    edit "RT-Action"
+        set action-type webhook
+        set protocol https
+        set uri "https://5ead174e-260d-424d-86a6-9329c00ea365.webhook.we.azure-automation.net/webhooks?token=wq0aQIZCpv0v5rf1IuhL27X6YN%2fQ%2bYPbrNmk30ZMCG8%3d"
+        set http-body "{\"action\":\"%%log.action%%\", \"addr\":\"%%log.addr%%\"}"
+        set port 443
+        set headers "ResourceGroupName:FORTINET-1554562727-33-RG" "RouteTableName:FORTINET-1554562727-33-RT-PROTECTED-A" "RouteTablePrefix:microseg" "NextHopIp:172.16.136.69"
+    next
+end
+config system automation-stitch
+    edit "RT-Stitch"
+        set trigger "RT-Trigger"
+        config actions
+            edit 1
+                set action "RT-Action"
+                set required enable
+            next
+        end
+    next
+end
 
 %{ if fgt_license_file != "" }
 --===============0086047718136476635==
