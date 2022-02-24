@@ -24,7 +24,6 @@ jobs:
   Ansible:
     name: "Ansible"
     runs-on: ubuntu-latest
-    needs: terraform
     env:
       TF_VAR_PREFIX: "FORTINET-1554562727-33"
       TF_VAR_LOCATION: "westeurope"
@@ -64,3 +63,4 @@ jobs:
           pwd
           more /tmp/ansible-inventory
           ansible-playbook ansible/fgt.yaml -i /tmp/ansible-inventory
+        working-directory: ${{ env.TFPath }}
