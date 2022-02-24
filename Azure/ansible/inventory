@@ -1,5 +1,0 @@
-[fgt]
-FORTINET-1554562727-33-FGT-VM  ansible_host="20.103.3.85" ansible_user="azureuser" ansible_password="Q1w2e34567890--"
-
-[fgt:vars]
-ansible_network_os=fortios
