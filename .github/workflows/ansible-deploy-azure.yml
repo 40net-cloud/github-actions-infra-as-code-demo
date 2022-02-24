@@ -1,4 +1,4 @@
-name: Terraform Deploy Azure
+name: Ansible Deploy Azure
 
 env:
   TFPath: Azure/
