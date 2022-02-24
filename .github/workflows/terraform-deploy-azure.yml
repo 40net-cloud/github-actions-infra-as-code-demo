@@ -153,9 +153,11 @@ jobs:
 
       - name: Terraform Output
         run: |
+          terraform refresh
           terraform output -raw ansible_inventory > "/tmp/ansible-inventory"
           pwd
           ls -la /tmp/ansible-inventory
+        working-directory: ${{ env.TFPath }}
 
       - name: Ansible config
         run: |
