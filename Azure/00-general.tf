@@ -154,7 +154,7 @@ variable "gateway_ipaddress" {
 }
 
 variable "fgt_vmsize" {
-  default = "Standard_F8s"
+  default = "Standard_F2s"
 }
 
 variable "fortinet_tags" {
