@@ -20,7 +20,7 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Day 1 - Terraform"
     runs-on: ubuntu-latest
     env:
       TF_VAR_PREFIX: "FORTINET-${{ github.run_id }}-${{ github.run_number }}"

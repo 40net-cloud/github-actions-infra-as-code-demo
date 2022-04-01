@@ -22,7 +22,7 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Day 1 - Terraform"
     runs-on: ubuntu-latest
     env:
       TF_VAR_PREFIX: "FORTINET-1554562727-33"
@@ -130,7 +130,7 @@ jobs:
         working-directory: ${{ env.TFPath }}
 
   Ansible:
-    name: "Ansible"
+    name: "Day 2 - Ansible"
     runs-on: ubuntu-latest
     needs: terraform
     env:
