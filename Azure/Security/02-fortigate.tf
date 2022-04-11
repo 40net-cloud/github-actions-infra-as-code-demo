@@ -64,7 +64,7 @@ resource "azurerm_network_interface" "fgtifcext" {
   ip_configuration {
     name                          = "interface1"
     subnet_id                     = data.tfe_outputs.network.values.vnet_subnet_id[0]
-    private_ip_address_allocation = "static"
+    private_ip_address_allocation = "Static"
     private_ip_address            = var.fgt_ipaddress[0]
     public_ip_address_id          = azurerm_public_ip.fgtpip.id
   }
