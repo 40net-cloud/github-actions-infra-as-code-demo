@@ -5,6 +5,7 @@ packages:
   - apt-transport-https
   - ca-certificates
   - software-properties-common
+  - unzip
 runcmd:
   - [mkdir, '/actions-runner']
   - cd /actions-runner
