@@ -71,7 +71,7 @@ resource "azurerm_local_network_gateway" "onpremise" {
   location            = azurerm_resource_group.resourcegroup.location
   resource_group_name = azurerm_resource_group.resourcegroup.name
   gateway_address     = "90.83.10.133"
-  address_space       = ["192.168.194.0/23","10.101.0.0/24","10.10.0.0/16","10.11.0.0/16","20.20.0.0/16","20.21.0.0/16"]
+  address_space       = ["192.168.194.0/23", "10.101.0.0/24", "10.10.0.0/16", "10.11.0.0/16", "20.20.0.0/16", "20.21.0.0/16"]
 }
 
 resource "azurerm_public_ip" "vpnpip" {

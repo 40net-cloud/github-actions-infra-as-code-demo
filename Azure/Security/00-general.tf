@@ -205,7 +205,7 @@ output "flexvm_token" {
 
 data "tfe_outputs" "network" {
   organization = "40net-cloud"
-  workspace = "github-actions-infra-as-code-demo-azure-network"
+  workspace    = "github-actions-infra-as-code-demo-azure-network"
 }
 
 ##############################################################################################################

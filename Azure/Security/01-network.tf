@@ -40,7 +40,7 @@ resource "azurerm_route_table" "protectedaroute" {
 }
 
 resource "azurerm_subnet_route_table_association" "subnet6rt" {
-  subnet_id = data.tfe_outputs.network.values.vnet_subnet_id[5]
+  subnet_id      = data.tfe_outputs.network.values.vnet_subnet_id[5]
   route_table_id = azurerm_route_table.protectedbroute.id
 }
 

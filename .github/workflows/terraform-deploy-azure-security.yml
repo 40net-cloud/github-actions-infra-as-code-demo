@@ -1,4 +1,4 @@
-name: Terraform Deploy Azure
+name: 'Terraform Azure - Security - FMG'
 
 env:
   TFPath: Azure/Security/
