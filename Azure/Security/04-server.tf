@@ -18,8 +18,8 @@ resource "azurerm_network_interface" "lnxifc" {
 
   ip_configuration {
     name                          = "interface1"
-    subnet_id                     = azurerm_subnet.subnet3.id
-    private_ip_address_allocation = "dynamic"
+    subnet_id                     = data.tfe_outputs.network.values.vnet_subnet_id[4]
+    private_ip_address_allocation = "Dynamic"
   }
 }
 
@@ -59,7 +59,7 @@ resource "azurerm_virtual_machine" "lnxvm" {
 }
 
 data "template_file" "lnx_custom_data" {
-  template = file("${path.module}/customdata-lnx.tpl")
+  template = file("${path.module}/customdata-runner.tpl")
 
   vars = {
   }

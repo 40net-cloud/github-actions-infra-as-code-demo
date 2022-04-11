@@ -80,7 +80,7 @@ terraform {
     organization = "40net-cloud"
 
     workspaces {
-      name = "github-actions-infra-as-code-demo-azure"
+      name = "github-actions-infra-as-code-demo-azure-security"
     }
   }
 }
@@ -104,43 +104,14 @@ provider "azurerm" {
 # Static variables
 ##############################################################################################################
 
-variable "vnet" {
-  description = ""
-  default     = "172.16.136.0/22"
-}
-
-variable "subnet" {
-  type        = map(string)
-  description = ""
-
-  default = {
-    "1" = "172.16.136.0/26"  # External
-    "2" = "172.16.136.64/26" # Internal
-    "3" = "172.16.137.0/24"  # Protected a
-    "4" = "172.16.138.0/24"  # Protected b
-  }
-}
-
-variable "subnetmask" {
-  type        = map(string)
-  description = ""
-
-  default = {
-    "1" = "26" # External
-    "2" = "26" # Internal
-    "3" = "24" # Protected a
-    "4" = "24" # Protected b
-  }
-}
-
 variable "fgt_ipaddress" {
-  type        = map(string)
+  type        = list(string)
   description = ""
 
-  default = {
-    "1" = "172.16.136.5"  # External
-    "2" = "172.16.136.69" # Internal
-  }
+  default = [
+    "172.16.136.5",
+    "172.16.136.69"
+  ]
 }
 
 variable "gateway_ipaddress" {
@@ -154,7 +125,7 @@ variable "gateway_ipaddress" {
 }
 
 variable "fgt_vmsize" {
-  default = "Standard_F4s"
+  default = "Standard_F2s"
 }
 
 variable "fortinet_tags" {
@@ -180,7 +151,7 @@ variable "backend_tags" {
 ##############################################################################################################
 
 resource "azurerm_resource_group" "resourcegroup" {
-  name     = "${var.PREFIX}-RG"
+  name     = "${var.PREFIX}-SEC-RG"
   location = var.LOCATION
   tags     = var.fortinet_tags
 }
@@ -227,4 +198,14 @@ output "flexvm_token" {
 }
 
 ##############################################################################################################
+#
+# Retrieve output of the network provisioning stage
+#
+##############################################################################################################
 
+data "tfe_outputs" "network" {
+  organization = "40net-cloud"
+  workspace = "github-actions-infra-as-code-demo-azure-network"
+}
+
+##############################################################################################################

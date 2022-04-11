@@ -1,0 +1,132 @@
+name: 'Terraform Azure - Network - FMG'
+
+env:
+  TFPath: Azure/Network/
+
+on:
+  push:
+    branches:
+      - FMG
+    paths:
+    - 'Azure/Network/**'
+    - '!Azure/Network/**.md'
+  pull_request_target:
+    branches:
+      - FMG
+    paths:
+    - 'Azure/Network/**'
+    - '!Azure/Network/**.md'
+# To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+  workflow_dispatch:
+
+
+jobs:
+  terraform:
+    name: "Day 1 - Terraform - Network"
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_PREFIX: "JVH-DEVOPS"
+      TF_VAR_LOCATION: "westeurope"
+      TF_VAR_USERNAME: "azureuser"
+      TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
+      TF_VAR_VPN_PSK: "${{ secrets.VPN_PSK }}"
+      TF_VAR_FLEXVM_API_USERNAME: "${{ secrets.FLEXVM_API_USERNAME }}"
+      TF_VAR_FLEXVM_API_PASSWORD: "${{ secrets.FLEXVM_API_PASSWORD }}"
+      TF_VAR_FLEXVM_PROGRAM_SERIAL: "${{ secrets.FLEXVM_PROGRAM_SERIAL }}"
+      TF_VAR_FLEXVM_CONFIG_NAME: "${{ secrets.FLEXVM_CONFIG_NAME }}"
+      TF_VAR_FLEXVM_VM_SERIAL: "${{ secrets.FLEXVM_VM_SERIAL }}"
+      TF_VAR_runner_token: "${{ secrets.RUNNER_TOKEN }}"
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        working-directory: ${{ env.TFPath }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.TFPath }}
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: ${{ env.TFPath }}
+
+      - name: Terraform Plan
+        id: plan
+#        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color -out plan.tfplan
+        continue-on-error: true
+        working-directory: ${{ env.TFPath }}
+
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v1
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Convert TFPLAN
+        run: terraform show -json plan.tfplan > plan.json
+        working-directory: ${{ env.TFPath }}
+
+      - name: Generate Infracost JSON
+        run: infracost breakdown --path plan.json --format json --usage-file infracost-usage.yml --out-file /tmp/infracost.json
+        working-directory: ${{ env.TFPath }}
+
+      - name: Post Infracost comment
+        uses: infracost/actions/comment@v1
+        with:
+          path: /tmp/infracost.json
+          behavior: update
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.TFPath }}

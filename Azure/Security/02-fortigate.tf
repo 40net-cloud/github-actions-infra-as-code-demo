@@ -20,6 +20,40 @@ resource "azurerm_public_ip" "fgtpip" {
   domain_name_label   = format("%s-%s", lower(var.PREFIX), "fgt-pip")
 }
 
+resource "azurerm_network_security_group" "fgtnsg" {
+  name                = "${var.PREFIX}-FGT-NSG"
+  location            = var.LOCATION
+  resource_group_name = azurerm_resource_group.resourcegroup.name
+}
+
+resource "azurerm_network_security_rule" "fgtnsgallowallout" {
+  name                        = "AllowAllOutbound"
+  resource_group_name         = azurerm_resource_group.resourcegroup.name
+  network_security_group_name = azurerm_network_security_group.fgtnsg.name
+  priority                    = 100
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+}
+
+resource "azurerm_network_security_rule" "fgtnsgallowallin" {
+  name                        = "AllowAllInbound"
+  resource_group_name         = azurerm_resource_group.resourcegroup.name
+  network_security_group_name = azurerm_network_security_group.fgtnsg.name
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+}
+
 resource "azurerm_network_interface" "fgtifcext" {
   name                          = "${var.PREFIX}-FGT-VM-IFC-EXT"
   location                      = azurerm_resource_group.resourcegroup.location
@@ -29,9 +63,9 @@ resource "azurerm_network_interface" "fgtifcext" {
 
   ip_configuration {
     name                          = "interface1"
-    subnet_id                     = azurerm_subnet.subnet1.id
+    subnet_id                     = data.tfe_outputs.network.values.vnet_subnet_id[0]
     private_ip_address_allocation = "static"
-    private_ip_address            = var.fgt_ipaddress["1"]
+    private_ip_address            = var.fgt_ipaddress[0]
     public_ip_address_id          = azurerm_public_ip.fgtpip.id
   }
 }
@@ -51,9 +85,9 @@ resource "azurerm_network_interface" "fgtifcint" {
 
   ip_configuration {
     name                          = "interface1"
-    subnet_id                     = azurerm_subnet.subnet2.id
-    private_ip_address_allocation = "static"
-    private_ip_address            = var.fgt_ipaddress["2"]
+    subnet_id                     = data.tfe_outputs.network.values.vnet_subnet_id[1]
+    private_ip_address_allocation = "Static"
+    private_ip_address            = var.fgt_ipaddress[1]
   }
 }
 
@@ -118,13 +152,13 @@ data "template_file" "fgt_custom_data" {
     fgt_username        = var.USERNAME
     fgt_password        = var.PASSWORD
     fgt_ssh_public_key  = var.FGT_SSH_PUBLIC_KEY_FILE
-    fgt_external_ipaddr = var.fgt_ipaddress["1"]
-    fgt_external_mask   = var.subnetmask["1"]
+    fgt_external_ipaddr = var.fgt_ipaddress[0]
+    fgt_external_mask   = data.tfe_outputs.network.values.vnet_subnet[0]
     fgt_external_gw     = var.gateway_ipaddress["1"]
-    fgt_internal_ipaddr = var.fgt_ipaddress["2"]
-    fgt_internal_mask   = var.subnetmask["2"]
+    fgt_internal_ipaddr = var.fgt_ipaddress[1]
+    fgt_internal_mask   = data.tfe_outputs.network.values.vnet_subnet[1]
     fgt_internal_gw     = var.gateway_ipaddress["2"]
-    vnet_network        = var.vnet
+    vnet_network        = data.tfe_outputs.network.values.vnet
   }
 }
 
