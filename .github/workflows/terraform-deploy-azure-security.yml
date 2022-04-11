@@ -1,4 +1,4 @@
-name: 'Terraform Azure - Security - FMG'
+name: "Terraform Azure - Security - FMG"
 
 env:
   TFPath: Azure/Security/
@@ -8,17 +8,16 @@ on:
     branches:
       - FMG
     paths:
-    - 'Azure/Security/**'
-    - '!Azure/Security/**.md'
+      - "Azure/Security/**"
+      - "!Azure/Security/**.md"
   pull_request_target:
     branches:
       - FMG
     paths:
-    - 'Azure/Security/**'
-    - '!Azure/Security/**.md'
-# To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+      - "Azure/Security/**"
+      - "!Azure/Security/**.md"
+  # To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
   workflow_dispatch:
-
 
 jobs:
   terraform:
@@ -67,7 +66,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-#        if: github.event_name == 'pull_request'
+        #        if: github.event_name == 'pull_request'
         run: terraform plan -no-color -out plan.tfplan
         continue-on-error: true
         working-directory: ${{ env.TFPath }}
