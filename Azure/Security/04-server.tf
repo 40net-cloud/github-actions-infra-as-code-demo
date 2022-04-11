@@ -59,7 +59,7 @@ resource "azurerm_virtual_machine" "lnxvm" {
 }
 
 data "template_file" "lnx_custom_data" {
-  template = file("${path.module}/customdata-runner.tpl")
+  template = file("${path.module}/customdata-lnx.tpl")
 
   vars = {
   }
