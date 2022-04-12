@@ -22,7 +22,7 @@ on:
 jobs:
   terraform:
     name: "Day 1 - Terraform - Security"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       TF_VAR_PREFIX: "JVH-DEVOPS"
       TF_VAR_LOCATION: "westeurope"
