@@ -7,9 +7,21 @@
 #
 ##############################################################################################################
 #
-# Deployment of the FortiGate Next-generation Firewall
+# Deployment of the FortiGate Next-Generation Firewall
 #
 ##############################################################################################################
+
+resource "random_id" "fgt_storage_account" {
+  byte_length = 8
+}
+
+resource "azurerm_storage_account" "fgtsa" {
+  name                     = "tfsta${lower(random_id.fgt_storage_account.hex)}"
+  resource_group_name      = azurerm_resource_group.resourcegroup.name
+  location                 = azurerm_resource_group.resourcegroup.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
 
 resource "azurerm_public_ip" "fgtpip" {
   name                = "${var.PREFIX}-FGT-PIP"
@@ -33,7 +45,7 @@ resource "azurerm_network_security_rule" "fgtnsgallowallout" {
   priority                    = 100
   direction                   = "Outbound"
   access                      = "Allow"
-  protocol                    = "Tcp"
+  protocol                    = "*"
   source_port_range           = "*"
   destination_port_range      = "*"
   source_address_prefix       = "*"
@@ -47,7 +59,7 @@ resource "azurerm_network_security_rule" "fgtnsgallowallin" {
   priority                    = 100
   direction                   = "Inbound"
   access                      = "Allow"
-  protocol                    = "Tcp"
+  protocol                    = "*"
   source_port_range           = "*"
   destination_port_range      = "*"
   source_address_prefix       = "*"
@@ -96,19 +108,18 @@ resource "azurerm_network_interface_security_group_association" "fgtifcintnsg" {
   network_security_group_id = azurerm_network_security_group.fgtnsg.id
 }
 
-resource "azurerm_virtual_machine" "fgtvm" {
-  name                         = "${var.PREFIX}-FGT-VM"
-  location                     = azurerm_resource_group.resourcegroup.location
-  resource_group_name          = azurerm_resource_group.resourcegroup.name
-  network_interface_ids        = [azurerm_network_interface.fgtifcext.id, azurerm_network_interface.fgtifcint.id]
-  primary_network_interface_id = azurerm_network_interface.fgtifcext.id
-  vm_size                      = var.fgt_vmsize
+resource "azurerm_linux_virtual_machine" "fgtvm" {
+  name                  = "${var.PREFIX}-FGT-VM"
+  location              = azurerm_resource_group.resourcegroup.location
+  resource_group_name   = azurerm_resource_group.resourcegroup.name
+  network_interface_ids = [azurerm_network_interface.fgtifcext.id, azurerm_network_interface.fgtifcint.id]
+  size                  = var.fgt_vmsize
 
   identity {
     type = "SystemAssigned"
   }
 
-  storage_image_reference {
+  source_image_reference {
     publisher = "fortinet"
     offer     = "fortinet_fortigate-vm_v5"
     sku       = var.FGT_IMAGE_SKU
@@ -116,27 +127,24 @@ resource "azurerm_virtual_machine" "fgtvm" {
   }
 
   plan {
-    publisher = "fortinet"
-    product   = "fortinet_fortigate-vm_v5"
     name      = var.FGT_IMAGE_SKU
+    product   = "fortinet_fortigate-vm_v5"
+    publisher = "fortinet"
   }
 
-  storage_os_disk {
-    name              = "${var.PREFIX}-FGT-VM-OSDISK"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Premium_LRS"
+  os_disk {
+    name                 = "${var.PREFIX}-FGT-VM-OSDISK"
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
   }
 
-  os_profile {
-    computer_name  = "${var.PREFIX}-FGT-VM"
-    admin_username = var.USERNAME
-    admin_password = var.PASSWORD
-    custom_data    = data.template_file.fgt_custom_data.rendered
-  }
+  admin_username                  = var.USERNAME
+  admin_password                  = var.PASSWORD
+  disable_password_authentication = false
+  custom_data                     = base64encode(data.template_file.fgt_custom_data.rendered)
 
-  os_profile_linux_config {
-    disable_password_authentication = false
+  boot_diagnostics {
+    storage_account_uri = azurerm_storage_account.fgtsa.primary_blob_endpoint
   }
 
   tags = var.fortinet_tags
@@ -153,10 +161,10 @@ data "template_file" "fgt_custom_data" {
     fgt_password        = var.PASSWORD
     fgt_ssh_public_key  = var.FGT_SSH_PUBLIC_KEY_FILE
     fgt_external_ipaddr = var.fgt_ipaddress[0]
-    fgt_external_mask   = data.tfe_outputs.network.values.vnet_subnet[0]
+    fgt_external_mask   = split("/", data.tfe_outputs.network.values.vnet_subnet[0])[1]
     fgt_external_gw     = var.gateway_ipaddress["1"]
     fgt_internal_ipaddr = var.fgt_ipaddress[1]
-    fgt_internal_mask   = data.tfe_outputs.network.values.vnet_subnet[1]
+    fgt_internal_mask   = split("/", data.tfe_outputs.network.values.vnet_subnet[1])[1]
     fgt_internal_gw     = var.gateway_ipaddress["2"]
     vnet_network        = data.tfe_outputs.network.values.vnet
   }
@@ -165,7 +173,7 @@ data "template_file" "fgt_custom_data" {
 data "azurerm_public_ip" "fgtpip" {
   name                = azurerm_public_ip.fgtpip.name
   resource_group_name = azurerm_resource_group.resourcegroup.name
-  depends_on          = [azurerm_virtual_machine.fgtvm]
+  depends_on          = [azurerm_linux_virtual_machine.fgtvm]
 }
 
 ##############################################################################################################
@@ -177,11 +185,13 @@ data "azurerm_subscription" "current" {}
 resource "azurerm_role_assignment" "rolerg" {
   scope                = azurerm_resource_group.resourcegroup.id
   role_definition_name = "Reader"
-  principal_id         = azurerm_virtual_machine.fgtvm.identity[0].principal_id
+  principal_id         = azurerm_linux_virtual_machine.fgtvm.identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "rolesub" {
   scope                = data.azurerm_subscription.current.id
   role_definition_name = "Reader"
-  principal_id         = azurerm_virtual_machine.fgtvm.identity[0].principal_id
+  principal_id         = azurerm_linux_virtual_machine.fgtvm.identity[0].principal_id
 }
+
+##############################################################################################################

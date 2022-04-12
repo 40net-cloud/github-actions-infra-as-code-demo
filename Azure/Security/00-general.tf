@@ -38,7 +38,7 @@ variable "FGT_IMAGE_SKU" {
 
 variable "FGT_VERSION" {
   description = "FortiGate version by default the 'latest' available version in the Azure Marketplace is selected"
-  default     = "latest"
+  default     = "7.0.5"
 }
 
 variable "FGT_BYOL_LICENSE_FILE" {
@@ -109,8 +109,8 @@ variable "fgt_ipaddress" {
   description = ""
 
   default = [
-    "172.16.136.5",
-    "172.16.136.69"
+    "172.16.136.4",
+    "172.16.136.68"
   ]
 }
 

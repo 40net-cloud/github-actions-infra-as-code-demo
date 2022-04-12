@@ -35,7 +35,7 @@ data "terraform_remote_state" "vnet_subnet_id" {
   }
 }
 
-data "tfe_outputs" "vnet_subnet" {
+data "tfe_outputs" "network" {
   organization = "40net-cloud"
   workspace = "github-actions-infra-as-code-demo-azure-network"
 }
@@ -54,7 +54,7 @@ variable "test" {
 
 output "test" {
   sensitive = true
-  value = data.tfe_outputs.vnet_subnet
+  value = split("/", data.tfe_outputs.network.values.vnet_subnet[0])[1]
 }
 
 output "test2" {

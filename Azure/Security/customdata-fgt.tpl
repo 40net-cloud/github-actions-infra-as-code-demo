@@ -10,7 +10,7 @@ Content-Disposition: attachment; filename="config"
 config system sdn-connector
 	edit AzureSDN
 		set type azure
-	end
+	next
 end
 config sys global
     set hostname "${fgt_vm_name}"
@@ -39,13 +39,18 @@ config system interface
         set mode static
         set ip ${fgt_external_ipaddr}/${fgt_external_mask}
         set description external
-        set allowaccess ping https ssh ftm
+        set allowaccess ping https ssh ftm fgfm
     next
     edit port2
         set mode static
         set ip ${fgt_internal_ipaddr}/${fgt_internal_mask}
         set description internal
     next
+end
+config system central-management
+    set type fortimanager
+    set fmg 10.101.0.2
+    set serial-number FMG3KFT318000020
 end
 %{ if fgt_ssh_public_key != "" }
 config system admin
