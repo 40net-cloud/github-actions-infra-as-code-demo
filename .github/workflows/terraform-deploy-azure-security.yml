@@ -151,10 +151,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Terraform test
-        run: set
-        working-directory: ${{ env.TFPath }}
-
       - name: Terraform test2
         run: pwd
         working-directory: ${{ env.TFPath }}
@@ -165,6 +161,10 @@ jobs:
           # terraform_version: 0.13.0:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_wrapper: true
+
+      - name: Terraform test
+        run: set
+        working-directory: ${{ env.TFPath }}
 
       - name: Terraform test3
         run: /usr/bin/terraform init
