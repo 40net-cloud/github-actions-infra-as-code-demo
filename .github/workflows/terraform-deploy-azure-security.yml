@@ -167,7 +167,7 @@ jobs:
           terraform_wrapper: true
 
       - name: Terraform test3
-        run: terraform init
+        run: /usr/bin/terraform init
         working-directory: ${{ env.TFPath }}
 
       - name: Terraform Init
