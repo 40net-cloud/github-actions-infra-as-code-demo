@@ -172,6 +172,10 @@ jobs:
         run: terraform init
         working-directory: ${{ env.TFPath }}
 
+      - run: echo ${{ steps.plan.outputs.stdout }}
+      - run: echo ${{ steps.plan.outputs.stderr }}
+      - run: echo ${{ steps.plan.outputs.exitcode }}
+
       - name: Terraform Output
         run: terraform output -raw ansible_inventory > ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
