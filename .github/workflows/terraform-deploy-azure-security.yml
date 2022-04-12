@@ -131,7 +131,6 @@ jobs:
   Ansible:
     name: "Day 2 - Ansible"
     runs-on: self-hosted
-    needs: terraform
     env:
       TF_VAR_PREFIX: "JVH-DEVOPS"
       TF_VAR_LOCATION: "westeurope"
