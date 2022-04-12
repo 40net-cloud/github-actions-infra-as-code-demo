@@ -20,3 +20,10 @@ runcmd:
   - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - DEBIAN_FRONTEND=noninteractive apt update
   - DEBIAN_FRONTEND=noninteractive apt -y install docker-ce
+  - curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+  - apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  - DEBIAN_FRONTEND=noninteractive apt update
+  - DEBIAN_FRONTEND=noninteractive apt -y install terraform
+  - DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:ansible/ansible
+  - DEBIAN_FRONTEND=noninteractive apt update
+  - DEBIAN_FRONTEND=noninteractive apt -y install ansible
