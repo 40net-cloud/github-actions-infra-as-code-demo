@@ -1,0 +1,26 @@
+- name: Create a firewall policy {{ policy.name }}
+  fmgr_pkg_firewall_policy:
+      adom: '{{ adom }}'
+      pkg: '{{ policy.pkg }}'
+      state: '{{ state }}'
+      bypass_validation: true
+      pkg_firewall_policy:
+        policyid: '{{ policy.policyid }}'
+        name: '{{ policy.name }}'
+        srcintf: '{{ policy.srcintf }}'
+        dstintf: '{{ policy.dstintf }}'
+        srcaddr: '{{ policy.srcaddr.split("|") }}'
+        dstaddr: '{{ policy.dstaddr.split("|") }}'
+        service: '{{ policy.service.split("|") }}'
+        utm-status: '{{ policy["utm-status"] }}'
+        av-profile: '{{ policy["av-profile"] | default("default", true) }}'
+        ips-sensor: '{{ policy["ips-sensor"] | default("default", true) }}'
+        application-list: '{{ policy["application-list"] | default("default", true) }}'
+        ssl-ssh-profile: '{{ policy["ssl-ssh-profile"] | default("certificate-inspection", true) }}'
+        schedule: '{{ policy.schedule }}'
+        logtraffic: '{{ policy.logtraffic | default("all", true) }}'
+        action: '{{ policy.action }}'
+        comments: Created by ansible
+        label: '{{ policy.label }}'
+        nat: '{{ policy.nat | default("disable", true) }}'
+        global-label: '{{ policy["global-label"] }}'

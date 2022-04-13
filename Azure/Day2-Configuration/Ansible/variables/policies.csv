@@ -1,0 +1,4 @@
+pkg,policyid,name,srcintf,dstintf,srcaddr,dstaddr,service,action,nat,schedule,utm-status,av-profile,ips-sensor,application-list,ssl-ssh-profile,logtraffic,label,global-label
+ppkg_public_cloud,10001,azure_policy_001,port2,port2,object_azure_001,object_azure_001,ALL,accept,,always,enable,,,,,,Azure-related policies,Azure-related policies
+ppkg_public_cloud,10002,azure_policy_002,port2,port2,object_azure_002,object_azure_002,ALL,accept,,always,enable,,,,,,Azure-related policies,Azure-related policies
+ppkg_public_cloud,10003,azure_policy_003,port2,port1,object_azure_001|object_azure_002,all,ALL,accept,enable,always,enable,,,,,,Azure-related policies,Azure-related policies

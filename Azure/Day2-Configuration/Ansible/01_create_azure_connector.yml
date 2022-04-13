@@ -1,0 +1,15 @@
+---
+- hosts: fortimanagers
+  connection: httpapi
+  collections:
+    - fortinet.fortimanager
+  vars_files:
+    - variables/connectors.yml
+    - variables/global.yml
+  gather_facts: false
+  tasks:
+    - name: Create Azure connector
+      include_tasks: tasks/fmg_create_azure_connector.yml
+      loop: '{{ connectors.azure }}'
+      loop_control:
+        loop_var: connector

@@ -1,0 +1,12 @@
+---
+- name: CMDB | Get resolved hosts for object {{ object }} from device {{ device }}[{{ vdom }}]
+  fmgr_sys_proxy_json:
+    sys_proxy_json:
+      action: get
+      resource: /api/v2/cmdb/firewall/address/{{ object }}/list?vdom={{ vdom }}
+      target: "/adom/{{ adom }}/device/{{ device }}"
+  register: cmdb_resolved_hosts
+
+- name: CMDB - Display resolved hosts for object {{ object }} from device {{ device }}
+  debug:
+    msg: "{{ cmdb_resolved_hosts.meta.response_data[0].response.results }}"

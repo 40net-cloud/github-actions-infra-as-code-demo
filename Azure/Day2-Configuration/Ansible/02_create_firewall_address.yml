@@ -1,0 +1,15 @@
+---
+- hosts: fortimanagers
+  connection: httpapi
+  collections:
+    - fortinet.fortimanager
+  vars_files:
+    - variables/firewall_address.yml
+    - variables/global.yml
+  gather_facts: false
+  tasks:
+    - name: Create address objects
+      include_tasks: tasks/fmg_create_firewall_address.yml
+      loop: '{{ addresses }}'
+      loop_control:
+        loop_var: address

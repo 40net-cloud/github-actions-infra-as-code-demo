@@ -1,0 +1,10 @@
+---
+state: present
+adom: knock_39683
+devices:
+  - name: fgt_on_prem
+    vdom: vd01
+    policy_package: ppkg_on_prem
+  - name: fgt_public_cloud
+    vdom: root
+    policy_package: ppkg_public_cloud

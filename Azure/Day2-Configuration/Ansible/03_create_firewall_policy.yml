@@ -1,0 +1,22 @@
+---
+- hosts: fortimanagers
+  connection: httpapi
+  collections:
+    - fortinet.fortimanager
+  vars_files:
+    - variables/global.yml
+  gather_facts: false
+  tasks:
+    - name: Load policies from csv file
+      include_tasks: tasks/load_policies_from_csv_file.yml
+
+    - name: Create firewall policies
+      include_tasks: tasks/fmg_create_firewall_policy.yml
+      loop: "{{ policies }}"
+      loop_control:
+        loop_var: policy
+    - name: Install policy package
+      include_tasks: tasks/fmg_install_policy_package.yml
+      loop: '{{ devices }}'
+      loop_control:
+        loop_var: device

@@ -1,0 +1,14 @@
+---
+addresses:
+  - name: object_azure_001
+    type: dynamic
+    sub-type: sdn
+    sdn: azure_001
+    filter: Tag.Type=Webserver
+    color: 20
+  - name: object_azure_002
+    type: dynamic
+    sub-type: sdn
+    sdn: azure_001
+    filter: Tag.Type=Tester
+    color: 20

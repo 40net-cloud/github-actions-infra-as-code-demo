@@ -1,0 +1,23 @@
+- name: Install policy package {{ device.policy_package }} against device {{ device.name }}
+  fmgr_securityconsole_install_package:
+    securityconsole_install_package:
+      adom: '{{ adom }}'
+      flags:
+        - none
+      pkg: '{{ device.policy_package }}'
+      scope:
+        - name: '{{ device.name }}'
+          vdom: '{{ device.vdom }}'
+  register: install_task
+
+- name: Wait for policy package installation task to complete
+  fmgr_fact:
+    facts:
+      selector: task_task
+      params:
+        task: '{{ install_task.meta.response_data.task }}'
+  register: task_info
+  until: task_info.meta.response_data.percent == 100
+  retries: 30
+  delay: 3
+  failed_when: task_info.meta.response_data.state == 'error'

@@ -1,0 +1,13 @@
+- name: Create a firewall address object {{ address.name }}
+  fmgr_firewall_address:
+    adom: '{{ adom }}'
+    state: '{{ state }}'
+    bypass_validation: True
+    firewall_address:
+      name: '{{ address.name }}'
+      color: '{{ address.color }}'
+      type: '{{ address.type }}'
+      sub-type: '{{ address["sub-type"] }}'
+      sdn: '{{ address.sdn }}'
+      filter: '{{ address.filter }}'
+      comment: Created by ansible

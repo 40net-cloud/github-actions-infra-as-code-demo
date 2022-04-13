@@ -1,7 +1,7 @@
 name: "Terraform Azure - Network - FMG"
 
 env:
-  TFPath: Azure/Network/
+  TFPath: Azure/Day1-Network/
 
 on:
   push:

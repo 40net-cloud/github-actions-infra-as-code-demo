@@ -1,8 +1,5 @@
 name: "Terraform Azure - Security - FMG"
 
-env:
-  TFPath: Azure/Security/
-
 on:
   workflow_dispatch:
   push:
@@ -37,6 +34,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      TFPath: Azure/Day1-Security/
 
     steps:
       - name: Checkout
@@ -132,28 +130,20 @@ jobs:
     name: "Day 2 - Ansible"
     runs-on: self-hosted
     env:
-      TF_VAR_PREFIX: "JVH-DEVOPS"
-      TF_VAR_LOCATION: "westeurope"
-      TF_VAR_USERNAME: "azureuser"
-      TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
-      TF_VAR_FLEXVM_API_USERNAME: "${{ secrets.FLEXVM_API_USERNAME }}"
-      TF_VAR_FLEXVM_API_PASSWORD: "${{ secrets.FLEXVM_API_PASSWORD }}"
-      TF_VAR_FLEXVM_PROGRAM_SERIAL: "${{ secrets.FLEXVM_PROGRAM_SERIAL }}"
-      TF_VAR_FLEXVM_CONFIG_NAME: "${{ secrets.FLEXVM_CONFIG_NAME }}"
-      TF_VAR_FLEXVM_VM_SERIAL: "${{ secrets.FLEXVM_VM_SERIAL }}"
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      INVENTORY: "/tmp/ansible-inventory"
+      TF_VAR_FMG_HOST: ${{ secrets.FMG_HOST }}
+      TF_VAR_FMG_USERNAME: ${{ secrets.FMG_USERNAME }}
+      TF_VAR_FMG_PASSWORD: ${{ secrets.FMG_PASSWORD }}
+      TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      INVENTORY: "Ansible/inventory/host_vars/dut-fmg.yml"
+      CONNECTORS: "Ansible/variables/connectors.yml"
+      TFPath: Azure/Day2-Configuration/
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Terraform test2
-        run: pwd
-        working-directory: ${{ env.TFPath }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -162,27 +152,38 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_wrapper: true
 
-      - name: Terraform test
-        run: set
-        working-directory: ${{ env.TFPath }}
-
-      - name: Terraform test3
-        run: /usr/bin/terraform init
-        working-directory: ${{ env.TFPath }}
-
       - name: Terraform Init
         id: init
         run: terraform init
         working-directory: ${{ env.TFPath }}
 
-      - run: echo ${{ steps.plan.outputs.stdout }}
-      - run: echo ${{ steps.plan.outputs.stderr }}
-      - run: echo ${{ steps.plan.outputs.exitcode }}
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -out plan.tfplan
+        continue-on-error: true
+        working-directory: ${{ env.TFPath }}
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/FMG' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.TFPath }}
 
       - name: Terraform Output
         run: terraform output -raw ansible_inventory > ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
 
-      - name: Ansible config
-        run: ansible-playbook ansible/fgt.yaml -i ${{ env.INVENTORY }}
+      - name: Terraform Output
+        run: terraform output -raw ansible_connectors > ${{ env.CONNNECTORS }}
+        working-directory: ${{ env.TFPath }}
+
+      - name: Ansible Configure Azure Connector
+        run: ansible-playbook Ansible/01_create_azure_connector.yaml -i Ansible/inventory/main.yml
+        working-directory: ${{ env.TFPath }}
+
+      - name: Ansible Configure Firewall Address
+        run: ansible-playbook Ansible/02_create_firewall_address.yaml -i Ansible/inventory/main.yml
+        working-directory: ${{ env.TFPath }}
+
+      - name: Ansible Configure Firewall Policy
+        run: ansible-playbook Ansible/03_create_firewall_policy.yaml -i Ansible/inventory/main.yml
         working-directory: ${{ env.TFPath }}
