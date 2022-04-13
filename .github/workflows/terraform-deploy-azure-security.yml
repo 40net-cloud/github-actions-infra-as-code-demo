@@ -17,7 +17,7 @@ on:
   # To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 
 jobs:
-  terraform:
+  day1:
     name: "Day 1 - Terraform - Security"
     runs-on: ubuntu-latest
     env:
@@ -126,9 +126,10 @@ jobs:
 #        run: terraform apply -auto-approve
 #        working-directory: ${{ env.TFPath }}
 
-  Ansible:
+  day2:
     name: "Day 2 - Ansible"
     runs-on: self-hosted
+    needs: day1
     env:
       TF_VAR_FMG_HOST: ${{ secrets.FMG_HOST }}
       TF_VAR_FMG_USERNAME: ${{ secrets.FMG_USERNAME }}
@@ -176,9 +177,17 @@ jobs:
         run: terraform output -raw ansible_connectors > ${{ env.CONNECTORS }}
         working-directory: ${{ env.TFPath }}
 
-      - name: Ansible Configure Azure Connector
-        run: ansible-playbook Ansible/01_create_azure_connector.yml -i Ansible/inventory/main.yml
+      - name: Terraform Output
+        run: terraform output -raw ansible_inventory > /tmp/dut-fmg.yml
         working-directory: ${{ env.TFPath }}
+
+      - name: Terraform Output
+        run: terraform output -raw ansible_connectors > /tmp/connectors.yml
+        working-directory: ${{ env.TFPath }}
+
+#      - name: Ansible Configure Azure Connector
+#        run: ansible-playbook Ansible/01_create_azure_connector.yml -i Ansible/inventory/main.yml
+#        working-directory: ${{ env.TFPath }}
 
       - name: Ansible Configure Firewall Address
         run: ansible-playbook Ansible/02_create_firewall_address.yml -i Ansible/inventory/main.yml
