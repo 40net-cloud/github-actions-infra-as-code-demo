@@ -1,4 +1,4 @@
-- name: Install policy package {{ device.policy_package }} against device {{ device.name }}
+- name: 'Install policy package {{ device.policy_package }} against device {{ device.name }}'
   fmgr_securityconsole_install_package:
     securityconsole_install_package:
       adom: '{{ adom }}'

@@ -1,15 +1,15 @@
 ---
-- name: Load policies from CSV file
+- name: 'Load policies from CSV file'
   community.general.read_csv:
     path: variables/policies.csv
     delimiter: ","
   delegate_to: localhost
   register: csv_policies
 
-- name: Show policies loaded from CSV file
+- name: 'Show policies loaded from CSV file'
   debug:
     msg: "{{ csv_policies }}"
 
-- name: Set "policies" variable
+- name: 'Set policies variable'
   set_fact:
     policies: "{{ csv_policies.list }}"

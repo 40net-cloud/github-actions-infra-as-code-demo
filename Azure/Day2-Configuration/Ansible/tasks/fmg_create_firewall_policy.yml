@@ -1,4 +1,4 @@
-- name: Create a firewall policy {{ policy.name }}
+- name: 'Create a firewall policy {{ policy.name }}'
   fmgr_pkg_firewall_policy:
       adom: '{{ adom }}'
       pkg: '{{ policy.pkg }}'

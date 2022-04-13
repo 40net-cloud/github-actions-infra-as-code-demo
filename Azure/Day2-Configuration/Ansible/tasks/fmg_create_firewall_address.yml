@@ -1,4 +1,4 @@
-- name: Create a firewall address object {{ address.name }}
+- name: 'Create a firewall address object {{ address.name }}'
   fmgr_firewall_address:
     adom: '{{ adom }}'
     state: '{{ state }}'

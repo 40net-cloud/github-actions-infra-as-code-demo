@@ -1,5 +1,5 @@
 ---
-- name: CMDB | Get resolved hosts for object {{ object }} from device {{ device }}[{{ vdom }}]
+- name: 'CMDB | Get resolved hosts for object {{ object }} from device {{ device }}[{{ vdom }}'
   fmgr_sys_proxy_json:
     sys_proxy_json:
       action: get

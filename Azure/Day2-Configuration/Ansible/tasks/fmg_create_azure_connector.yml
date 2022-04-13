@@ -1,15 +1,14 @@
-- name: Create Azure connector {{ connector.name }}
+- name: 'Create Azure connector {{ connector.name }}'
   fmgr_system_sdnconnector:
-    adom: '{{ adom }}'
-    state: '{{ state }}'
+    adom: "{{ adom }}"
+    state: "{{ state }}"
     system_sdnconnector:
-      name: '{{ connector.name }}'
+      name: "{{ connector.name }}"
       type: azure
       status: enable
       update-interval: 30
       azure-region: '{{ connector["azure-region"] }}'
       client-id: '{{ connector["client-id"] }}'
       client-secret: '{{ connector["client-secret"] }}'
-      resource-group: '{{ connector["resource-group"] }}'
       subscription-id: '{{ connector["subscription-id"] }}'
       tenant-id: '{{ connector["tenant-id"] }}'
