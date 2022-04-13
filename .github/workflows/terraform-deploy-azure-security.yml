@@ -138,7 +138,7 @@ jobs:
       TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      INVENTORY: "Ansible/inventory/host_vars/dut-fmg.yml"
+      INVENTORY: "Ansible/inventory/host_vars/dut_fmg.yml"
       CONNECTORS: "Ansible/variables/connectors.yml"
       TFPath: Azure/Day2-Configuration/
 
@@ -151,7 +151,7 @@ jobs:
         with:
           # terraform_version: 0.13.0:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          terraform_wrapper: true
+          terraform_wrapper: false
 
       - name: Terraform Init
         id: init
@@ -177,17 +177,9 @@ jobs:
         run: terraform output -raw ansible_connectors > ${{ env.CONNECTORS }}
         working-directory: ${{ env.TFPath }}
 
-      - name: Terraform Output
-        run: terraform output -raw ansible_inventory > /tmp/dut-fmg.yml
+      - name: Ansible Configure Azure Connector
+        run: ansible-playbook Ansible/01_create_azure_connector.yml -i Ansible/inventory/main.yml
         working-directory: ${{ env.TFPath }}
-
-      - name: Terraform Output
-        run: terraform output -raw ansible_connectors > /tmp/connectors.yml
-        working-directory: ${{ env.TFPath }}
-
-#      - name: Ansible Configure Azure Connector
-#        run: ansible-playbook Ansible/01_create_azure_connector.yml -i Ansible/inventory/main.yml
-#        working-directory: ${{ env.TFPath }}
 
       - name: Ansible Configure Firewall Address
         run: ansible-playbook Ansible/02_create_firewall_address.yml -i Ansible/inventory/main.yml

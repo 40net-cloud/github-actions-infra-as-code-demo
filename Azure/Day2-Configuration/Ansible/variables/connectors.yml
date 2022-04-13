@@ -1,9 +1,0 @@
----
-connectors:
-  azure:
-    - name: azure_001
-      azure-region: global
-      client-id: d5221bbc-b13b-4e0a-832c-bb358c553cfe
-      client-secret: ESx7Q~8JCbdqtIGlpOUH0Jzpj~DfFpsdZHrkQ
-      subscription-id: f7f4728a-781f-470f-b029-bac8a9df75af
-      tenant-id: 942b80cd-1b14-42a1-8dcf-4b21dece61ba
