@@ -173,7 +173,7 @@ jobs:
         working-directory: ${{ env.TFPath }}
 
       - name: Terraform Output
-        run: terraform output -raw ansible_connectors > ${{ env.CONNNECTORS }}
+        run: terraform output -raw ansible_connectors > ${{ env.CONNECTORS }}
         working-directory: ${{ env.TFPath }}
 
       - name: Ansible Configure Azure Connector
