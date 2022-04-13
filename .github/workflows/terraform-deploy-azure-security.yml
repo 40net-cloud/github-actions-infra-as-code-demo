@@ -6,14 +6,18 @@ on:
     branches:
       - FMG
     paths:
-      - "Azure/Security/**"
-      - "!Azure/Security/**.md"
+      - "Azure/Day1-Security/**"
+      - "Azure/Day2-Configuration/**"
+      - "!Azure/Day1-Security/**.md"
+      - "!Azure/Day2-Configuration/**.md"
   pull_request_target:
     branches:
       - FMG
     paths:
-      - "Azure/Security/**"
-      - "!Azure/Security/**.md"
+      - "Azure/Day1-Security/**"
+      - "Azure/Day2-Configuration/**"
+      - "!Azure/Day1-Security/**.md"
+      - "!Azure/Day2-Configuration/**.md"
   # To be reviewed: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 
 jobs:
