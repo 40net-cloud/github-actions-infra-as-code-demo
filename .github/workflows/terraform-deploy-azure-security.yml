@@ -173,13 +173,6 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ${{ env.TFPath }}
 
-      - name: Test
-        run: |
-          pwd
-          ls -la
-          ls ${{ env.INVENTORY }}
-        working-directory: ${{ env.TFPath }}
-
       - name: Terraform Output
         run: terraform output -raw ansible_inventory > ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
