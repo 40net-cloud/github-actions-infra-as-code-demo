@@ -190,7 +190,6 @@ data "external" "flexvm" {
     configName    = var.FLEXVM_CONFIG_NAME
     vmSerial      = var.FLEXVM_VM_SERIAL
     vmOp          = "TOKEN"
-    deployment    = null_resource.deployment.id
   }
 }
 
