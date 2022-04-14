@@ -125,10 +125,10 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-#      - name: Terraform Apply
-#        if: github.ref == 'refs/heads/FMG' && github.event_name == 'push'
-#        run: terraform apply -auto-approve
-#        working-directory: ${{ env.TFPath }}
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/FMG' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.TFPath }}
 
   day2:
     name: "Day 2 - Ansible"
@@ -179,14 +179,6 @@ jobs:
 
       - name: Terraform Output
         run: terraform output -raw ansible_connectors > ${{ env.CONNECTORS }}
-        working-directory: ${{ env.TFPath }}
-
-      - name: Terraform Output
-        run: terraform output -raw ansible_inventory > /tmp/dut_fmg.yml
-        working-directory: ${{ env.TFPath }}
-
-      - name: Terraform Output
-        run: terraform output -raw ansible_connectors > /tmp/connectors.yml
         working-directory: ${{ env.TFPath }}
 
       - name: Ansible Configure Azure Connector
