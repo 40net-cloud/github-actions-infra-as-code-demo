@@ -181,6 +181,14 @@ jobs:
         run: terraform output -raw ansible_connectors > ${{ env.CONNECTORS }}
         working-directory: ${{ env.TFPath }}
 
+      - name: Terraform Output
+        run: terraform output -raw ansible_inventory > /tmp/dut_fmg.yml
+        working-directory: ${{ env.TFPath }}
+
+      - name: Terraform Output
+        run: terraform output -raw ansible_connectors > /tmp/connectors.yml
+        working-directory: ${{ env.TFPath }}
+
       - name: Ansible Configure Azure Connector
         run: ansible-playbook Ansible/01_create_azure_connector.yml -i Ansible/inventory/main.yml
         working-directory: ${{ env.TFPath }}
