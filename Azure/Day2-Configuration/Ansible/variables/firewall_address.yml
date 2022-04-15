@@ -16,5 +16,5 @@ addresses:
     type: dynamic
     sub-type: sdn
     sdn: azure_001
-    filter: Tag.Type=Tester2
+    filter: Tag.Type=Tester
     color: 20
