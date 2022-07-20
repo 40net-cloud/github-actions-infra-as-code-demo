@@ -25,7 +25,7 @@ jobs:
     name: "Day 1 - Terraform"
     runs-on: ubuntu-latest
     env:
-      TF_VAR_PREFIX: "FORTINET-1554562727-33"
+      TF_VAR_PREFIX: "EXN-1554562727-33"
       TF_VAR_LOCATION: "westeurope"
       TF_VAR_USERNAME: "azureuser"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
