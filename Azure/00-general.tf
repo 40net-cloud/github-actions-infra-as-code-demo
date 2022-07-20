@@ -77,7 +77,7 @@ terraform {
   }
 
   backend "remote" {
-    organization = "40net-cloud"
+    organization = "denarm"
 
     workspaces {
       name = "github-actions-infra-as-code-demo-azure"
