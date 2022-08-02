@@ -1,6 +1,6 @@
 ---
-  all:
-    children:
-      fortimanagers:
-        hosts:
-          dut_fmg:
+all:
+  children:
+    fortimanagers:
+      hosts:
+        dut_fmg:
