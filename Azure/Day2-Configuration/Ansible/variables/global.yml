@@ -1,6 +1,6 @@
 ---
 state: present
-adom: Coud2
+adom: InfrastructureAsCode
 devices:
   - name: FGVMELTM22000095
     vdom: root
