@@ -25,7 +25,7 @@ jobs:
     name: "Day 1 - Terraform - Security"
     runs-on: ubuntu-latest
     env:
-      TF_VAR_PREFIX: "JVH-DEVOPS"
+      TF_VAR_PREFIX: "JVH-DEVOPS-SEC"
       TF_VAR_LOCATION: "westeurope"
       TF_VAR_USERNAME: "azureuser"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
@@ -125,10 +125,10 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-#      - name: Terraform Apply
-#        if: github.ref == 'refs/heads/FMG' && github.event_name == 'push'
-#        run: terraform apply -auto-approve
-#        working-directory: ${{ env.TFPath }}
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/FMG' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.TFPath }}
 
   day2:
     name: "Day 2 - Ansible"
