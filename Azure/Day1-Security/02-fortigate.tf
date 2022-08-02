@@ -109,11 +109,14 @@ resource "azurerm_network_interface_security_group_association" "fgtifcintnsg" {
 }
 
 resource "azurerm_linux_virtual_machine" "fgtvm" {
-  name                  = "${var.PREFIX}-FGT-VM"
-  location              = azurerm_resource_group.resourcegroup.location
-  resource_group_name   = azurerm_resource_group.resourcegroup.name
-  network_interface_ids = [azurerm_network_interface.fgtifcext.id, azurerm_network_interface.fgtifcint.id]
-  size                  = var.fgt_vmsize
+  name                       = "${var.PREFIX}-FGT-VM"
+  location                   = azurerm_resource_group.resourcegroup.location
+  resource_group_name        = azurerm_resource_group.resourcegroup.name
+  network_interface_ids      = [azurerm_network_interface.fgtifcext.id, azurerm_network_interface.fgtifcint.id]
+  size                       = var.fgt_vmsize
+  encryption_at_host_enabled = false
+  secure_boot_enabled        = false
+  vtpm_enabled               = false
 
   identity {
     type = "SystemAssigned"
