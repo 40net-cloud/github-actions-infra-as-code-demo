@@ -1,6 +1,6 @@
 ---
 state: present
-adom: knock_39683
+adom: Cloud2
 devices:
   - name: FGVMELTM22000095
     vdom: root
