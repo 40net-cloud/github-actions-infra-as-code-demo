@@ -70,7 +70,7 @@ resource "azurerm_local_network_gateway" "onpremise" {
   name                = "${var.PREFIX}-VPN-Sophia"
   location            = azurerm_resource_group.resourcegroup.location
   resource_group_name = azurerm_resource_group.resourcegroup.name
-  gateway_fqdn     = "gorgon.jvh.be"
+  gateway_fqdn        = "gorgon.jvh.be"
   address_space       = ["172.16.251.0/24"]
 }
 
