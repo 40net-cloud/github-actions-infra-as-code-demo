@@ -39,7 +39,7 @@ resource "azurerm_subnet" "subnet3" {
 }
 
 resource "azurerm_subnet" "subnet4" {
-  name                 = "${var.PREFIX}-Management"
+  name                 = "${var.PREFIX}-SUBNET-MANAGEMENT"
   resource_group_name  = azurerm_resource_group.resourcegroup.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [var.subnet["4"]]
