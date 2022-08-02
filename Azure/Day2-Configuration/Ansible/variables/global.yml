@@ -1,6 +1,6 @@
 ---
 state: present
-adom: Cloud2
+adom: Coud2
 devices:
   - name: FGVMELTM22000095
     vdom: root
