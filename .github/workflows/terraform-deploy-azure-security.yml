@@ -182,7 +182,7 @@ jobs:
         working-directory: ${{ env.TFPath }}
 
       - name: Ansible Configure Azure Connector
-        run: ansible-playbook Ansible/01_create_azure_connector.yml -i Ansible/inventory/main.yml
+        run: ansible-playbook -vvv Ansible/01_create_azure_connector.yml -i Ansible/inventory/main.yml
         working-directory: ${{ env.TFPath }}
 
       - name: Ansible Configure Firewall Address
