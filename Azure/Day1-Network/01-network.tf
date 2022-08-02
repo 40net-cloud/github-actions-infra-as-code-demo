@@ -101,7 +101,7 @@ resource "azurerm_virtual_network_gateway" "vpngw" {
 }
 
 resource "azurerm_virtual_network_gateway_connection" "onpremise" {
-  name                = "toJVH"
+  name                = "toOnPremise"
   location            = azurerm_resource_group.resourcegroup.location
   resource_group_name = azurerm_resource_group.resourcegroup.name
 
