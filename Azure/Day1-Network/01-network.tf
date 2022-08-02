@@ -70,8 +70,8 @@ resource "azurerm_local_network_gateway" "onpremise" {
   name                = "${var.PREFIX}-VPN-Sophia"
   location            = azurerm_resource_group.resourcegroup.location
   resource_group_name = azurerm_resource_group.resourcegroup.name
-  gateway_address     = "90.83.10.133"
-  address_space       = ["192.168.194.0/23", "10.101.0.0/24", "10.10.0.0/16", "10.11.0.0/16", "20.20.0.0/16", "20.21.0.0/16"]
+  gateway_fqdn     = "gorgon.jvh.be"
+  address_space       = ["172.16.251.0/24"]
 }
 
 resource "azurerm_public_ip" "vpnpip" {
@@ -101,7 +101,7 @@ resource "azurerm_virtual_network_gateway" "vpngw" {
 }
 
 resource "azurerm_virtual_network_gateway_connection" "onpremise" {
-  name                = "toSophia"
+  name                = "toJVH"
   location            = azurerm_resource_group.resourcegroup.location
   resource_group_name = azurerm_resource_group.resourcegroup.name
 

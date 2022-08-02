@@ -63,7 +63,7 @@ provider "azurerm" {
 
 variable "vnet" {
   description = ""
-  default     = "172.16.136.0/22"
+  default     = "172.16.140.0/22"
 }
 
 variable "subnet" {
@@ -71,12 +71,12 @@ variable "subnet" {
   description = ""
 
   default = {
-    "1" = "172.16.136.0/26"   # External
-    "2" = "172.16.136.64/26"  # Internal
-    "3" = "172.16.136.192/27" # Gateway Subnet
-    "4" = "172.16.136.224/27" # Management
-    "5" = "172.16.137.0/24"   # Protected a
-    "6" = "172.16.138.0/24"   # Protected b
+    "1" = "172.16.140.0/26"   # External
+    "2" = "172.16.140.64/26"  # Internal
+    "3" = "172.16.140.192/27" # Gateway Subnet
+    "4" = "172.16.140.224/27" # Management
+    "5" = "172.16.141.0/24"   # Protected a
+    "6" = "172.16.142.0/24"   # Protected b
   }
 }
 
@@ -96,7 +96,7 @@ variable "subnetmask" {
 
 variable "fgt_internalip" {
   description = ""
-  default     = "172.16.136.69"
+  default     = "172.16.140.69"
 }
 
 variable "fortinet_tags" {

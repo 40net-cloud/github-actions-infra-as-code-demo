@@ -109,8 +109,8 @@ variable "fgt_ipaddress" {
   description = ""
 
   default = [
-    "172.16.136.4",
-    "172.16.136.68"
+    "172.16.140.4",
+    "172.16.140.68"
   ]
 }
 
@@ -119,8 +119,8 @@ variable "gateway_ipaddress" {
   description = ""
 
   default = {
-    "1" = "172.16.136.1"  # External
-    "2" = "172.16.136.65" # Internal
+    "1" = "172.16.140.1"  # External
+    "2" = "172.16.140.65" # Internal
   }
 }
 

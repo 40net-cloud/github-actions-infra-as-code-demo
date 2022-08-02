@@ -49,8 +49,8 @@ config system interface
 end
 config system central-management
     set type fortimanager
-    set fmg 10.101.0.2
-    set serial-number FMG3KFT318000020
+    set fmg fmg.jvh.be
+    set serial-number FMG-VMTM21009191
 end
 %{ if fgt_ssh_public_key != "" }
 config system admin
@@ -81,7 +81,7 @@ config system automation-action
         set uri "5ead174e-260d-424d-86a6-9329c00ea365.webhook.we.azure-automation.net/webhooks?token=wq0aQIZCpv0v5rf1IuhL27X6YN%2fQ%2bYPbrNmk30ZMCG8%3d"
         set http-body "{\"action\":\"%%log.action%%\", \"addr\":\"%%log.addr%%\"}"
         set port 443
-        set headers "ResourceGroupName:FORTINET-1554562727-33-RG" "RouteTableName:FORTINET-1554562727-33-RT-PROTECTED-A" "RouteNamePrefix:ms" "NextHopIp:172.16.136.69"
+        set headers "ResourceGroupName:FORTINET-1554562727-33-RG" "RouteTableName:FORTINET-1554562727-33-RT-PROTECTED-A" "RouteNamePrefix:ms" "NextHopIp:172.16.140.69"
     next
 end
 config system automation-stitch
