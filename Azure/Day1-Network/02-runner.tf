@@ -130,7 +130,7 @@ resource "azurerm_linux_virtual_machine" "runnervm" {
   location              = var.LOCATION
   resource_group_name   = azurerm_resource_group.resourcegroup.name
   network_interface_ids = [azurerm_network_interface.runnerifc.id]
-  size                  = "Standard_B1s"
+  size                  = "Standard_B2s"
 
   source_image_reference {
     publisher = "Canonical"
