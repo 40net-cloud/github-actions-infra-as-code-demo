@@ -25,7 +25,7 @@ jobs:
     name: "Day 1 - Terraform - Security"
     runs-on: ubuntu-latest
     env:
-      TF_VAR_PREFIX: "JVH-DEVOPS-SEC"
+      TF_VAR_PREFIX: "JVH-DEVOPS"
       TF_VAR_LOCATION: "westeurope"
       TF_VAR_USERNAME: "azureuser"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
