@@ -92,7 +92,7 @@ flexvm_vms_stop () {
   RESPONSE=$(curl -s -d '{"serialNumber": "'${VM_FOUND}'"}' -H 'Content-Type: application/json' -H "${AUTH_HEADER}" ${FLEXVM_BASE_URL}/vms/stop)
   STATUS=$(echo ${RESPONSE} | jq -r '.["status"]')
 
-  echo "VMs List Status: ${STATUS}" 1>&2
+  echo "VMs Stop Status: ${STATUS}" 1>&2
 
   if [ ${STATUS} -eq 0 ];
   then
@@ -112,7 +112,7 @@ flexvm_vms_reactivate () {
   RESPONSE=$(curl -s -d '{"serialNumber": "'${VM_FOUND}'"}' -H 'Content-Type: application/json' -H "${AUTH_HEADER}" ${FLEXVM_BASE_URL}/vms/reactivate)
   STATUS=$(echo ${RESPONSE} | jq -r '.["status"]')
 
-  echo "VMs List Status: ${STATUS}" 1>&2
+  echo "VMs Reactivate Status: ${STATUS}" 1>&2
 
   if [ ${STATUS} -eq 0 ];
   then
@@ -132,7 +132,7 @@ flexvm_vms_token () {
   RESPONSE=$(curl -s -d '{"serialNumber": "'${VM_FOUND}'"}' -H 'Content-Type: application/json' -H "${AUTH_HEADER}" ${FLEXVM_BASE_URL}/vms/token)
   STATUS=$(echo ${RESPONSE} | jq -r '.["status"]')
 
-  echo "VMs List Status: ${STATUS}" 1>&2
+  echo "VMs Token Status: ${STATUS}" 1>&2
 
   if [ ${STATUS} -eq 0 ];
   then
@@ -184,8 +184,8 @@ else
       fi
 
       flexvm_vms_token
-
-      flexvm_output
     fi
   fi
 fi
+
+flexvm_output
