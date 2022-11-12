@@ -104,6 +104,10 @@ resource "azurerm_virtual_machine" "fgtvm" {
   os_profile_linux_config {
     disable_password_authentication = false
   }
+  
+  boot_diagnostics {
+    enabled = true
+  }
 
   tags = var.fortinet_tags
 }
