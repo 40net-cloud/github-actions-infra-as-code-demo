@@ -69,7 +69,7 @@ jobs:
         id: plan
 #        if: github.event_name == 'pull_request'
         run: terraform plan -no-color -out plan.tfplan
-        continue-on-error: true
+#        continue-on-error: true
         working-directory: ${{ env.TFPath }}
 
       - uses: actions/github-script@0.9.0
