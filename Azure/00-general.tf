@@ -68,7 +68,7 @@ variable "FGT_ACCELERATED_NETWORKING" {
 ##############################################################################################################
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 1.0"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"

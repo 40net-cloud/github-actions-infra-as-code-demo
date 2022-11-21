@@ -48,7 +48,7 @@ resource "azurerm_virtual_machine" "lnxvm" {
     computer_name  = "${var.PREFIX}-LNX-VM"
     admin_username = var.USERNAME
     admin_password = var.PASSWORD
-    custom_data    = data.template_file.lnx_custom_data.rendered
+    custom_data    = templatefile("${path.module}/customdata-lnx.tpl", {})
   }
 
   os_profile_linux_config {
@@ -58,9 +58,3 @@ resource "azurerm_virtual_machine" "lnxvm" {
   tags = var.backend_tags
 }
 
-data "template_file" "lnx_custom_data" {
-  template = file("${path.module}/customdata-lnx.tpl")
-
-  vars = {
-  }
-}
