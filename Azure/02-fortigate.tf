@@ -62,19 +62,21 @@ resource "azurerm_network_interface_security_group_association" "fgtifcintnsg" {
   network_security_group_id = azurerm_network_security_group.fgtnsg.id
 }
 
-resource "azurerm_virtual_machine" "fgtvm" {
-  name                         = "${var.PREFIX}-FGT-VM"
-  location                     = azurerm_resource_group.resourcegroup.location
-  resource_group_name          = azurerm_resource_group.resourcegroup.name
-  network_interface_ids        = [azurerm_network_interface.fgtifcext.id, azurerm_network_interface.fgtifcint.id]
-  primary_network_interface_id = azurerm_network_interface.fgtifcext.id
-  vm_size                      = var.fgt_vmsize
+resource "azurerm_linux_virtual_machine" "fgtvm" {
+  name                       = "${var.PREFIX}-FGT-VM"
+  location                   = azurerm_resource_group.resourcegroup.location
+  resource_group_name        = azurerm_resource_group.resourcegroup.name
+  network_interface_ids      = [azurerm_network_interface.fgtifcext.id, azurerm_network_interface.fgtifcint.id]
+  size                       = var.fgt_vmsize
+  encryption_at_host_enabled = false
+  secure_boot_enabled        = false
+  vtpm_enabled               = false
 
   identity {
     type = "SystemAssigned"
   }
 
-  storage_image_reference {
+  source_image_reference {
     publisher = "fortinet"
     offer     = "fortinet_fortigate-vm_v5"
     sku       = var.FGT_IMAGE_SKU
@@ -82,46 +84,37 @@ resource "azurerm_virtual_machine" "fgtvm" {
   }
 
   plan {
-    publisher = "fortinet"
-    product   = "fortinet_fortigate-vm_v5"
     name      = var.FGT_IMAGE_SKU
+    product   = "fortinet_fortigate-vm_v5"
+    publisher = "fortinet"
   }
 
-  storage_os_disk {
-    name              = "${var.PREFIX}-FGT-VM-OSDISK"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Premium_LRS"
+  os_disk {
+    name                 = "${var.PREFIX}-FGT-VM-OSDISK"
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
   }
 
-  os_profile {
-    computer_name  = "${var.PREFIX}-FGT-VM"
-    admin_username = var.USERNAME
-    admin_password = var.PASSWORD
-    custom_data = templatefile("${path.module}/customdata-fgt.tpl", {
-      fgt_vm_name         = "${var.PREFIX}-FGT-VM",
-      fgt_license_file    = var.FGT_BYOL_LICENSE_FILE,
-      fgt_license_flexvm  = data.external.flexvm.result.vmToken,
-      fgt_username        = var.USERNAME,
-      fgt_password        = var.PASSWORD,
-      fgt_ssh_public_key  = var.FGT_SSH_PUBLIC_KEY_FILE,
-      fgt_external_ipaddr = var.fgt_ipaddress["1"],
-      fgt_external_mask   = var.subnetmask["1"],
-      fgt_external_gw     = var.gateway_ipaddress["1"],
-      fgt_internal_ipaddr = var.fgt_ipaddress["2"],
-      fgt_internal_mask   = var.subnetmask["2"],
-      fgt_internal_gw     = var.gateway_ipaddress["2"],
-      vnet_network        = var.vnet
-    })
-
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
+  admin_username                  = var.USERNAME
+  admin_password                  = var.PASSWORD
+  disable_password_authentication = false
+  custom_data = base64encode(templatefile("${path.module}/customdata-fgt.tpl", {
+    fgt_vm_name         = "${var.PREFIX}-FGT-VM",
+    fgt_license_file    = var.FGT_BYOL_LICENSE_FILE,
+    fgt_license_flexvm  = data.external.flexvm.result.vmToken,
+    fgt_username        = var.USERNAME,
+    fgt_password        = var.PASSWORD,
+    fgt_ssh_public_key  = var.FGT_SSH_PUBLIC_KEY_FILE,
+    fgt_external_ipaddr = var.fgt_ipaddress["1"],
+    fgt_external_mask   = var.subnetmask["1"],
+    fgt_external_gw     = var.gateway_ipaddress["1"],
+    fgt_internal_ipaddr = var.fgt_ipaddress["2"],
+    fgt_internal_mask   = var.subnetmask["2"],
+    fgt_internal_gw     = var.gateway_ipaddress["2"],
+    vnet_network        = var.vnet
+  }))
 
   boot_diagnostics {
-    enabled = true
   }
 
   tags = var.fortinet_tags
@@ -130,7 +123,7 @@ resource "azurerm_virtual_machine" "fgtvm" {
 data "azurerm_public_ip" "fgtpip" {
   name                = azurerm_public_ip.fgtpip.name
   resource_group_name = azurerm_resource_group.resourcegroup.name
-  depends_on          = [azurerm_virtual_machine.fgtvm]
+  depends_on          = [azurerm_linux_virtual_machine.fgtvm]
 }
 
 ##############################################################################################################
@@ -142,11 +135,11 @@ data "azurerm_subscription" "current" {}
 resource "azurerm_role_assignment" "rolerg" {
   scope                = azurerm_resource_group.resourcegroup.id
   role_definition_name = "Reader"
-  principal_id         = azurerm_virtual_machine.fgtvm.identity[0].principal_id
+  principal_id         = azurerm_linux_virtual_machine.fgtvm.identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "rolesub" {
   scope                = data.azurerm_subscription.current.id
   role_definition_name = "Reader"
-  principal_id         = azurerm_virtual_machine.fgtvm.identity[0].principal_id
+  principal_id         = azurerm_linux_virtual_machine.fgtvm.identity[0].principal_id
 }
