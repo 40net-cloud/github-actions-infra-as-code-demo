@@ -19,7 +19,7 @@ resource "azurerm_network_interface" "lnxifc" {
   ip_configuration {
     name                          = "interface1"
     subnet_id                     = azurerm_subnet.subnet3.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
   }
 }
 
