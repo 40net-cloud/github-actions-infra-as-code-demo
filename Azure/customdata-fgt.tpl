@@ -8,7 +8,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="config"
 
 config system sdn-connector
-	edit AzureSDN
+	edit azure
 		set type azure
 	end
 end
