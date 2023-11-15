@@ -118,6 +118,10 @@ resource "azurerm_linux_virtual_machine" "fgtvm" {
   }
 
   tags = var.fortinet_tags
+
+  lifecycle {
+    ignore_changes = [custom_data]
+  }
 }
 
 data "azurerm_public_ip" "fgtpip" {
