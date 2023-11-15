@@ -99,19 +99,19 @@ resource "azurerm_linux_virtual_machine" "fgtvm" {
   admin_password                  = var.PASSWORD
   disable_password_authentication = false
   custom_data = base64encode(templatefile("${path.module}/customdata-fgt.tpl", {
-    fgt_vm_name         = "${var.PREFIX}-FGT-VM",
-    fgt_license_file    = var.FGT_BYOL_LICENSE_FILE,
-    fgt_license_flexvm  = data.external.flexvm.result.vmToken,
-    fgt_username        = var.USERNAME,
-    fgt_password        = var.PASSWORD,
-    fgt_ssh_public_key  = var.FGT_SSH_PUBLIC_KEY_FILE,
-    fgt_external_ipaddr = var.fgt_ipaddress["1"],
-    fgt_external_mask   = var.subnetmask["1"],
-    fgt_external_gw     = var.gateway_ipaddress["1"],
-    fgt_internal_ipaddr = var.fgt_ipaddress["2"],
-    fgt_internal_mask   = var.subnetmask["2"],
-    fgt_internal_gw     = var.gateway_ipaddress["2"],
-    vnet_network        = var.vnet
+    fgt_vm_name           = "${var.PREFIX}-FGT-VM",
+    fgt_license_file      = var.FGT_BYOL_LICENSE_FILE,
+    fgt_license_fortiflex = fortiflexvm_entitlements_vm_token.fortiflex_vm.token
+    fgt_username          = var.USERNAME,
+    fgt_password          = var.PASSWORD,
+    fgt_ssh_public_key    = var.FGT_SSH_PUBLIC_KEY_FILE,
+    fgt_external_ipaddr   = var.fgt_ipaddress["1"],
+    fgt_external_mask     = var.subnetmask["1"],
+    fgt_external_gw       = var.gateway_ipaddress["1"],
+    fgt_internal_ipaddr   = var.fgt_ipaddress["2"],
+    fgt_internal_mask     = var.subnetmask["2"],
+    fgt_internal_gw       = var.gateway_ipaddress["2"],
+    vnet_network          = var.vnet
   }))
 
   boot_diagnostics {

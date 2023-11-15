@@ -1,6 +1,28 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
+provider "registry.terraform.io/fortinetdev/fortiflexvm" {
+  version     = "2.1.0"
+  constraints = ">= 2.0.0"
+  hashes = [
+    "h1:u5sLY6pCu+hUCPArqJ3pFaw1sHVYrMeK9i6YUGVcfX0=",
+    "zh:1b16df8c32441c38eabeee291a2109b26c36460c4962746b47f8dad4a75ede33",
+    "zh:1e072ad2d883436a84381dcba3931b8be173baf213809a191fa00dd5dbcff4f1",
+    "zh:2b2dfe0706a56fcaeef0e15d882cfad44074411029f8a7b2e8b1b3d8471c21b6",
+    "zh:3aa9a108a84e0626873608c9df70257f335939cc161d3278e1b3cff4d9bf529b",
+    "zh:486799c1b7c21fec403146632aa09aa2be07f99deb482a3f2d235bc2cefa6900",
+    "zh:51f50a0f62f6ae1b050f151adf539fef17a19dd3af0fd69688faeacef071cac4",
+    "zh:542f7c3f79bedcba8ba768e4fd7c0ef4025fc3f3823cac48244da2d4f3b77666",
+    "zh:648a81d641278149f4088b3db2a31abbd9d80f200748e6d154ef3894133c1576",
+    "zh:8cd86621f2201aef7cc432dcaa853aad53f4aa775d6e147163d61c3faba416b0",
+    "zh:a1a5cf6c0c76e85d23540f69e19141587dfb5893fce6171de67123875dcdc85b",
+    "zh:bc25c9a48f30b55ca0df6f8e9d671575a68c120183a1800ac868ddc32d5a9a54",
+    "zh:c5d6ea7520ee0bb3a104d8ee36f387301f96b19a68b7349abd10dd9b91f96b25",
+    "zh:d0dc906547d791dbd22da5e3c394b1160dd5a7a3725a8624dfd8c4d08cf763e1",
+    "zh:ea00c0ddb39d0e3a0ce5334f7cf46f21c3115bea8459973e49eada55a13c53db",
+  ]
+}
+
 provider "registry.terraform.io/hashicorp/azurerm" {
   version     = "3.32.0"
   constraints = ">= 2.0.0"

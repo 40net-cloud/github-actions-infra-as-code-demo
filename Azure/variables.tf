@@ -45,12 +45,32 @@ variable "FGT_BYOL_LICENSE_FILE" {
   default = ""
 }
 
-variable "FGT_BYOL_FLEXVM_LICENSE_FILE" {
+variable "FGT_BYOL_FORTIFLEX_LICENSE_FILE" {
   default = ""
 }
 
 variable "FGT_SSH_PUBLIC_KEY_FILE" {
   default = ""
+}
+
+##############################################################################################################
+# FortiFlex
+##############################################################################################################
+
+variable "FORTIFLEX_USERNAME" {
+  description = "FORTIFLEX API username"
+}
+
+variable "FORTIFLEX_PASSWORD" {
+  description = "FORTIFLEX API password"
+}
+
+variable "FORTIFLEX_CONFIG_ID" {
+  description = "FORTIFLEX Config ID"
+}
+
+variable "FORTIFLEX_VM_SERIAL" {
+  description = "FORTIFLEX Program Serial"
 }
 
 ##############################################################################################################
@@ -61,32 +81,6 @@ variable "FGT_SSH_PUBLIC_KEY_FILE" {
 variable "FGT_ACCELERATED_NETWORKING" {
   description = "Enables Accelerated Networking for the network interfaces of the FortiGate"
   default     = "true"
-}
-
-##############################################################################################################
-# Deployment in Microsoft Azure
-##############################################################################################################
-
-terraform {
-  required_version = ">= 1.0"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">=2.0.0"
-    }
-  }
-
-  backend "remote" {
-    organization = "40net-cloud"
-
-    workspaces {
-      name = "github-actions-infra-as-code-demo-azure"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
 }
 
 ##############################################################################################################
@@ -184,46 +178,3 @@ resource "azurerm_resource_group" "resourcegroup" {
   location = var.LOCATION
   tags     = var.fortinet_tags
 }
-
-##############################################################################################################
-# Retrieve Flex VM token
-##############################################################################################################
-
-variable "FLEXVM_API_USERNAME" {
-  description = "FlexVM API username"
-}
-
-variable "FLEXVM_API_PASSWORD" {
-  description = "FlexVM API password"
-}
-
-variable "FLEXVM_PROGRAM_SERIAL" {
-  description = "FlexVM Program Serial"
-}
-
-variable "FLEXVM_CONFIG_NAME" {
-  description = "FlexVM Config Name"
-}
-
-variable "FLEXVM_VM_SERIAL" {
-  description = "FlexVM VM Serial"
-}
-
-data "external" "flexvm" {
-  program = ["bash", "${path.root}/flexvm_ops.sh"]
-
-  query = {
-    apiUsername   = var.FLEXVM_API_USERNAME
-    apiPassword   = var.FLEXVM_API_PASSWORD
-    programSerial = var.FLEXVM_PROGRAM_SERIAL
-    configName    = var.FLEXVM_CONFIG_NAME
-    vmSerial      = var.FLEXVM_VM_SERIAL
-    vmOp          = "TOKEN"
-  }
-}
-
-output "flexvm_token" {
-  value = data.external.flexvm.result.vmToken
-}
-
-##############################################################################################################
