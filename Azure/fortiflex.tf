@@ -1,3 +1,16 @@
+##############################################################################################################
+#
+# Fortinet
+# Infrastructure As Code Demo
+# GitHub Actions - Terraform Cloud
+# Platform: Azure
+#
+##############################################################################################################
+#
+# FortiFlex
+#
+##############################################################################################################
+
 resource "fortiflexvm_entitlements_vm_token" "fortiflex_vm" {
   config_id        = var.FORTIFLEX_CONFIG_ID
   serial_number    = var.FORTIFLEX_VM_SERIAL

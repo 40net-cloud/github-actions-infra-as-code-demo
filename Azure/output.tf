@@ -3,6 +3,7 @@
 # Fortinet
 # Infrastructure As Code Demo
 # GitHub Actions - Terraform Cloud
+# Platform: Azure
 #
 ##############################################################################################################
 #

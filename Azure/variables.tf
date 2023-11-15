@@ -3,12 +3,11 @@
 # Fortinet
 # Infrastructure As Code Demo
 # GitHub Actions - Terraform Cloud
+# Platform: Azure
 #
 ##############################################################################################################
 #
-#
 # Variables during deployment the first 4 (PREFIX, LOCATION, USERNAME, PASSWORD) are mandatory
-#
 #
 ##############################################################################################################
 
