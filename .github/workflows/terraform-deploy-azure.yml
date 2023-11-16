@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: terraform
     env:
-      TF_VAR_PREFIX: "FORTINET-1554562727-33"
+      TF_VAR_PREFIX: "JVH-DEVOPS"
       TF_VAR_LOCATION: "westeurope"
       TF_VAR_USERNAME: "azureuser"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"
@@ -168,6 +168,48 @@ jobs:
       - name: Terraform Output
         run: terraform output -raw ansible_inventory > ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
+
+      - name: Set up Azure CLI
+        uses: azure/cli@v1
+        with:
+          azcliversion: 2.0.72
+
+      - name: Run script
+        run: |
+          #!/bin/bash
+
+          resourceGroup="JVH-DEVOPS-RG"
+          vmName="JVH-DEVOPS-FGT-VM"
+
+          # Retrieve public IP address
+          publicIpAddress=$(az vm show --resource-group $resourceGroup --name $vmName --query "publicIps" -o tsv)
+
+          if [ -z "$publicIpAddress" ]; then
+            echo "Error: Unable to retrieve the public IP address of the VM. Exiting."
+            exit 1
+          fi
+
+          # Check if VM is running
+          vmStatus=$(az vm show --resource-group $resourceGroup --name $vmName --query "powerState" -o tsv)
+
+          if [ "$vmStatus" != "VM running" ]; then
+            echo "VM is not running. Starting the VM..."
+            az vm start --resource-group $resourceGroup --name $vmName --no-wait
+          fi
+
+          # Wait until the VM is responding on its public IP
+          echo "Waiting for the VM to be responsive..."
+          while :
+          do
+            response=$(curl -sSf $publicIpAddress)
+            if [ $? -eq 0 ]; then
+              echo "VM is now responsive."
+              break
+            fi
+            sleep 10
+          done
+
+          echo "Script execution complete."
 
       - name: Ansible config
         run: ansible-playbook ansible/fgt.yaml -i ${{ env.INVENTORY }}
