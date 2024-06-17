@@ -131,7 +131,7 @@ jobs:
 
   Ansible:
     name: "Day 2 - Ansible"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu22-20240603.1.0
     needs: terraform
     env:
       TF_VAR_PREFIX: "JVH-DEVOPS"
