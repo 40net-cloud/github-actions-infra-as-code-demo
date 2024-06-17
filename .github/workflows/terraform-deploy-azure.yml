@@ -210,5 +210,7 @@ jobs:
 #            echo "Script execution complete."
 
       - name: Ansible config
-        run: ansible-playbook ansible/fgt.yaml -i ${{ env.INVENTORY }}
+        run: |
+          ansible --version
+          ansible-playbook ansible/fgt.yaml -i ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
