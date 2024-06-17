@@ -212,6 +212,7 @@ jobs:
       - name: Ansible config
         run: |
           pip install ansible-core==2.16.7
+          ansible-galaxy collection install fortinet.fortios
           ansible --version
           ansible-playbook ansible/fgt.yaml -i ${{ env.INVENTORY }}
         working-directory: ${{ env.TFPath }}
