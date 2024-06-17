@@ -12,10 +12,10 @@
 ##############################################################################################################
 
 resource "azurerm_network_interface" "lnxifc" {
-  name                 = "${var.PREFIX}-LNX-VM-ifc"
-  location             = var.LOCATION
-  resource_group_name  = azurerm_resource_group.resourcegroup.name
-  enable_ip_forwarding = false
+  name                  = "${var.PREFIX}-LNX-VM-ifc"
+  location              = var.LOCATION
+  resource_group_name   = azurerm_resource_group.resourcegroup.name
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "interface1"
