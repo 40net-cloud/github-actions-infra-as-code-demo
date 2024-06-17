@@ -173,7 +173,7 @@ variable "backend_tags" {
 ##############################################################################################################
 
 resource "azurerm_resource_group" "resourcegroup" {
-  name     = "${var.PREFIX}-RG"
+  name     = "${var.PREFIX}-rg"
   location = var.LOCATION
   tags     = var.fortinet_tags
 }

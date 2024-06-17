@@ -29,7 +29,7 @@ output "ansible_inventory" {
     location              = var.LOCATION,
     fgt_public_ip_address = data.azurerm_public_ip.fgtpip.ip_address,
     fgt_public_fqdn       = data.azurerm_public_ip.fgtpip.fqdn,
-    fgt_hostname          = "${var.PREFIX}-FGT-VM"
+    fgt_hostname          = "${var.PREFIX}-fgt-vm"
   })
 }
 ##############################################################################################################

@@ -12,7 +12,7 @@
 ##############################################################################################################
 
 resource "azurerm_network_interface" "lnxifc" {
-  name                  = "${var.PREFIX}-LNX-VM-ifc"
+  name                  = "${var.PREFIX}-lnx-vm-ifc"
   location              = var.LOCATION
   resource_group_name   = azurerm_resource_group.resourcegroup.name
   ip_forwarding_enabled = false
@@ -25,7 +25,7 @@ resource "azurerm_network_interface" "lnxifc" {
 }
 
 resource "azurerm_virtual_machine" "lnxvm" {
-  name                  = "${var.PREFIX}-LNX-VM"
+  name                  = "${var.PREFIX}-lnx-vm"
   location              = var.LOCATION
   resource_group_name   = azurerm_resource_group.resourcegroup.name
   network_interface_ids = [azurerm_network_interface.lnxifc.id]
@@ -39,14 +39,14 @@ resource "azurerm_virtual_machine" "lnxvm" {
   }
 
   storage_os_disk {
-    name              = "${var.PREFIX}-LNX-VM-OSDISK"
+    name              = "${var.PREFIX}-lnx-vm-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
 
   os_profile {
-    computer_name  = "${var.PREFIX}-LNX-VM"
+    computer_name  = "${var.PREFIX}-lnx-vm"
     admin_username = var.USERNAME
     admin_password = var.PASSWORD
     custom_data    = templatefile("${path.module}/customdata-lnx.tpl", {})

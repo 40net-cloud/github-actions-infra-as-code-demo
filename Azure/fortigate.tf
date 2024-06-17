@@ -12,7 +12,7 @@
 ##############################################################################################################
 
 resource "azurerm_public_ip" "fgtpip" {
-  name                = "${var.PREFIX}-FGT-PIP"
+  name                = "${var.PREFIX}-fgt-pip"
   location            = var.LOCATION
   resource_group_name = azurerm_resource_group.resourcegroup.name
   allocation_method   = "Static"
@@ -21,7 +21,7 @@ resource "azurerm_public_ip" "fgtpip" {
 }
 
 resource "azurerm_network_interface" "fgtifcext" {
-  name                           = "${var.PREFIX}-FGT-VM-IFC-EXT"
+  name                           = "${var.PREFIX}-fgt-vm-ifc-ext"
   location                       = azurerm_resource_group.resourcegroup.location
   resource_group_name            = azurerm_resource_group.resourcegroup.name
   ip_forwarding_enabled          = true
@@ -43,7 +43,7 @@ resource "azurerm_network_interface_security_group_association" "fgtifcmgmtnsg" 
 
 
 resource "azurerm_network_interface" "fgtifcint" {
-  name                           = "${var.PREFIX}-FGT-VM-IFC-INT"
+  name                           = "${var.PREFIX}-fgt-vm-ifc-int"
   location                       = azurerm_resource_group.resourcegroup.location
   resource_group_name            = azurerm_resource_group.resourcegroup.name
   ip_forwarding_enabled          = true
@@ -63,7 +63,7 @@ resource "azurerm_network_interface_security_group_association" "fgtifcintnsg" {
 }
 
 resource "azurerm_linux_virtual_machine" "fgtvm" {
-  name                       = "${var.PREFIX}-FGT-VM"
+  name                       = "${var.PREFIX}-fgt-vm"
   location                   = azurerm_resource_group.resourcegroup.location
   resource_group_name        = azurerm_resource_group.resourcegroup.name
   network_interface_ids      = [azurerm_network_interface.fgtifcext.id, azurerm_network_interface.fgtifcint.id]
@@ -90,7 +90,7 @@ resource "azurerm_linux_virtual_machine" "fgtvm" {
   }
 
   os_disk {
-    name                 = "${var.PREFIX}-FGT-VM-OSDISK"
+    name                 = "${var.PREFIX}-fgt-vm-osdisk"
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
