@@ -21,17 +21,6 @@ variable "LOCATION" {
   description = "Azure region"
 }
 
-variable "fortinet_tags" {
-  description = "tags required for Fortinet Azure environment"
-  default = {
-    Name               = "Robert Rother"
-    Username           = "rrother"
-    ExpectedUseThrough = "2024-08"
-    VMState            = "AlwaysOn"
-    CostCenter         = "5900"
-  }
-}
-
 variable "USERNAME" {
 }
 
@@ -168,6 +157,11 @@ variable "fortinet_tags" {
     publisher : "Fortinet",
     template : "GitHub Actions Infra As Code Demo Azure",
     environment : "staging"
+    Name : "Robert Rother"
+    Username : "rrother"
+    ExpectedUseThrough : "2024-08"
+    VMState : "AlwaysOn"
+    CostCenter : "5900"
   }
 }
 
