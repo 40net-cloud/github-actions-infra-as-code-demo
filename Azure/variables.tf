@@ -14,7 +14,6 @@
 # Prefix for all resources created for this deployment in Microsoft Azure
 variable "PREFIX" {
   description = "Added name to each deployed resource"
-  default     = "github-actions-demo"
 }
 
 variable "LOCATION" {
@@ -148,7 +147,7 @@ variable "gateway_ipaddress" {
 }
 
 variable "fgt_vmsize" {
-  default = "Standard_F4s"
+  default = "Standard_F2s"
 }
 
 variable "fortinet_tags" {
@@ -157,11 +156,6 @@ variable "fortinet_tags" {
     publisher : "Fortinet",
     template : "GitHub Actions Infra As Code Demo Azure",
     environment : "staging"
-    Name : "Robert Rother"
-    Username : "rrother"
-    ExpectedUseThrough : "2024-08"
-    VMState : "AlwaysOn"
-    CostCenter : "5900"
   }
 }
 
