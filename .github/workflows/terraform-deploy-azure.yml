@@ -25,7 +25,7 @@ jobs:
     name: "Day 1 - Terraform"
     runs-on: ubuntu-latest
     env:
-      TF_VAR_PREFIX: "rrother-devops"
+      TF_VAR_PREFIX: "jvh-devops"
       TF_VAR_LOCATION: "westeurope"
       TF_VAR_USERNAME: "azureuser"
       TF_VAR_PASSWORD: "${{ secrets.PASSWORD }}"

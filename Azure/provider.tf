@@ -25,7 +25,7 @@ terraform {
   }
 
   backend "remote" {
-    organization = "rrother_fortinet"
+    organization = "40net-cloud"
 
     workspaces {
       name = "github-actions-infra-as-code-demo-azure"
