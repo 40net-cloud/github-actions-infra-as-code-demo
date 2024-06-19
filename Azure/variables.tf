@@ -14,7 +14,7 @@
 # Prefix for all resources created for this deployment in Microsoft Azure
 variable "PREFIX" {
   description = "Added name to each deployed resource"
-  default = "github-actions-demo"
+  default     = "github-actions-demo"
 }
 
 variable "LOCATION" {
@@ -24,11 +24,11 @@ variable "LOCATION" {
 variable "fortinet_tags" {
   description = "tags required for Fortinet Azure environment"
   default = {
-    Name = "Robert Rother"
-    Username = "rrother"
+    Name               = "Robert Rother"
+    Username           = "rrother"
     ExpectedUseThrough = "2024-08"
-    VMState = "AlwaysOn"
-    CostCenter = "5900"
+    VMState            = "AlwaysOn"
+    CostCenter         = "5900"
   }
 }
 
