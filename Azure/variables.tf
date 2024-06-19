@@ -25,7 +25,7 @@ variable "fortinet_tags" {
   description = "tags required for Fortinet Azure environment"
   default = {
     Name = "Robert Rother"
-    Username = rrother
+    Username = "rrother"
     ExpectedUseThrough = "2024-08"
     VMState = "AlwaysOn"
     CostCenter = "5900"
